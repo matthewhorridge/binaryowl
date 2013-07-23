@@ -474,8 +474,6 @@ public class ObjectRoundTripTestCase {
         roundTripAxiom(obj);
     }
 
-
-
     @Test
     public void _AnnotationAssertion() {
         roundTripAxiom(AnnotationAssertion(L, A.getIRI(), B.getIRI()));
@@ -509,6 +507,79 @@ public class ObjectRoundTripTestCase {
         OWLAnnotation inner1 = df.getOWLAnnotation(L, A.getIRI());
         OWLAnnotation inner2 = df.getOWLAnnotation(L, B.getIRI());
         roundTrip(df.getOWLAnnotation(L, A.getIRI(), new HashSet<OWLAnnotation>(Arrays.asList(inner1, inner2))));
+    }
+
+    @Test
+    public void _SWRLVariable() {
+        OWLDataFactory df = OWLManager.getOWLDataFactory();
+        SWRLVariable variable = df.getSWRLVariable(A.getIRI());
+        roundTrip(variable);
+    }
+
+    @Test
+    public void _SWRLLiteralArgument() {
+        OWLDataFactory df = OWLManager.getOWLDataFactory();
+        SWRLLiteralArgument literalArgument = df.getSWRLLiteralArgument(LIT);
+        roundTrip(literalArgument);
+    }
+
+    @Test
+    public void _SWRLIndividualArgument() {
+        OWLDataFactory df = OWLManager.getOWLDataFactory();
+        SWRLIndividualArgument individualArgument = df.getSWRLIndividualArgument(i);
+        roundTrip(individualArgument);
+    }
+
+    @Test
+    public void _SWRLDifferentIndividuals() {
+        OWLDataFactory df = OWLManager.getOWLDataFactory();
+        SWRLDifferentIndividualsAtom atom = df.getSWRLDifferentIndividualsAtom(df.getSWRLIndividualArgument(i), df.getSWRLIndividualArgument(j));
+        roundTrip(atom);
+    }
+
+
+    @Test
+    public void _SWRLBuiltInAtom() {
+        OWLDataFactory df = OWLManager.getOWLDataFactory();
+        SWRLBuiltInAtom builtInAtom = df.getSWRLBuiltInAtom(A.getIRI(), Arrays.<SWRLDArgument>asList(df.getSWRLVariable(B.getIRI()), df.getSWRLLiteralArgument(LIT)));
+        roundTrip(builtInAtom);
+    }
+
+    @Test
+    public void _SWRLObjectPropertyAtom() {
+        OWLDataFactory df  = OWLManager.getOWLDataFactory();
+        SWRLObjectPropertyAtom atom = df.getSWRLObjectPropertyAtom(R, df.getSWRLIndividualArgument(i), df.getSWRLIndividualArgument(j));
+        roundTrip(atom);
+    }
+
+    @Test
+    public void _SWRLDataPropertyAtom() {
+        OWLDataFactory df  = OWLManager.getOWLDataFactory();
+        SWRLDataPropertyAtom atom = df.getSWRLDataPropertyAtom(T, df.getSWRLIndividualArgument(i), df.getSWRLLiteralArgument(LIT));
+        roundTrip(atom);
+    }
+
+    @Test
+    public void _SWRLClassAtom() {
+        OWLDataFactory df = OWLManager.getOWLDataFactory();
+        SWRLClassAtom atom = df.getSWRLClassAtom(A, df.getSWRLIndividualArgument(i));
+        roundTrip(atom);
+    }
+
+    @Test
+    public void _SWRLDataRangeAtom() {
+        OWLDataFactory df = OWLManager.getOWLDataFactory();
+        SWRLDataRangeAtom atom = df.getSWRLDataRangeAtom(DT, df.getSWRLLiteralArgument(LIT));
+        roundTrip(atom);
+    }
+
+    @Test
+    public void _SWRLRule() {
+        OWLDataFactory df = OWLManager.getOWLDataFactory();
+        SWRLClassAtom atomA = df.getSWRLClassAtom(A, df.getSWRLIndividualArgument(i));
+        SWRLClassAtom atomB = df.getSWRLClassAtom(B, df.getSWRLIndividualArgument(i));
+        SWRLRule rule = df.getSWRLRule(Collections.singleton(atomA), Collections.singleton(atomB));
+        roundTrip(rule);
     }
 
     @Test
