@@ -1,1 +1,4 @@
 .DS_store
+Project_Default.xml
+*.iml
+.idea
