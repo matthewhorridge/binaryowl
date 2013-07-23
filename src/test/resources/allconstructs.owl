@@ -446,168 +446,168 @@
         <DataProperty IRI="#dp"/>
         <DataProperty IRI="#dq"/>
     </HasKey>
-    <!--<DLSafeRule>-->
-        <!--<Body>-->
-            <!--<ClassAtom>-->
-                <!--<Class IRI="#B"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-            <!--</ClassAtom>-->
-        <!--</Body>-->
-        <!--<Head>-->
-            <!--<ClassAtom>-->
-                <!--<Class IRI="#F"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-            <!--</ClassAtom>-->
-        <!--</Head>-->
-    <!--</DLSafeRule>-->
-    <!--<DLSafeRule>-->
-        <!--<Body>-->
-            <!--<ObjectPropertyAtom>-->
-                <!--<ObjectProperty IRI="#op"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-                <!--<Variable IRI="urn:swrl#y"/>-->
-            <!--</ObjectPropertyAtom>-->
-        <!--</Body>-->
-        <!--<Head>-->
-            <!--<ClassAtom>-->
-                <!--<Class IRI="#B"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-            <!--</ClassAtom>-->
-        <!--</Head>-->
-    <!--</DLSafeRule>-->
-    <!--<DLSafeRule>-->
-        <!--<Body>-->
-            <!--<ObjectPropertyAtom>-->
-                <!--<ObjectProperty IRI="#op"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-                <!--<Variable IRI="urn:swrl#y"/>-->
-            <!--</ObjectPropertyAtom>-->
-            <!--<ObjectPropertyAtom>-->
-                <!--<ObjectProperty IRI="#op"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-                <!--<Variable IRI="urn:swrl#z"/>-->
-            <!--</ObjectPropertyAtom>-->
-            <!--<SameIndividualAtom>-->
-                <!--<Variable IRI="urn:swrl#y"/>-->
-                <!--<Variable IRI="urn:swrl#z"/>-->
-            <!--</SameIndividualAtom>-->
-        <!--</Body>-->
-        <!--<Head>-->
-            <!--<ClassAtom>-->
-                <!--<Class IRI="#A"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-            <!--</ClassAtom>-->
-        <!--</Head>-->
-    <!--</DLSafeRule>-->
-    <!--<DLSafeRule>-->
-        <!--<Body>-->
-            <!--<ObjectPropertyAtom>-->
-                <!--<ObjectProperty IRI="#op"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-                <!--<Variable IRI="urn:swrl#y"/>-->
-            <!--</ObjectPropertyAtom>-->
-            <!--<ObjectPropertyAtom>-->
-                <!--<ObjectProperty IRI="#op"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-                <!--<Variable IRI="urn:swrl#z"/>-->
-            <!--</ObjectPropertyAtom>-->
-            <!--<DifferentIndividualsAtom>-->
-                <!--<Variable IRI="urn:swrl#y"/>-->
-                <!--<Variable IRI="urn:swrl#z"/>-->
-            <!--</DifferentIndividualsAtom>-->
-        <!--</Body>-->
-        <!--<Head>-->
-            <!--<ClassAtom>-->
-                <!--<Class IRI="#A"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-            <!--</ClassAtom>-->
-        <!--</Head>-->
-    <!--</DLSafeRule>-->
-    <!--<DLSafeRule>-->
-        <!--<Body>-->
-            <!--<ObjectPropertyAtom>-->
-                <!--<ObjectProperty IRI="#op"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-                <!--<NamedIndividual IRI="#i"/>-->
-            <!--</ObjectPropertyAtom>-->
-        <!--</Body>-->
-        <!--<Head>-->
-            <!--<ClassAtom>-->
-                <!--<Class IRI="#B"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-            <!--</ClassAtom>-->
-        <!--</Head>-->
-    <!--</DLSafeRule>-->
-    <!--<DLSafeRule>-->
-        <!--<Body>-->
-            <!--<DataPropertyAtom>-->
-                <!--<DataProperty IRI="#dp"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-                <!--<Literal datatypeIRI="&rdf;PlainLiteral">aaa</Literal>-->
-            <!--</DataPropertyAtom>-->
-        <!--</Body>-->
-        <!--<Head>-->
-            <!--<ClassAtom>-->
-                <!--<Class IRI="#F"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-            <!--</ClassAtom>-->
-        <!--</Head>-->
-    <!--</DLSafeRule>-->
-    <!--<DLSafeRule>-->
-        <!--<Body>-->
-            <!--<DataPropertyAtom>-->
-                <!--<DataProperty IRI="#dq"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-                <!--<Variable IRI="urn:swrl#y"/>-->
-            <!--</DataPropertyAtom>-->
-            <!--<DataPropertyAtom>-->
-                <!--<DataProperty IRI="#dr"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-                <!--<Variable IRI="urn:swrl#y"/>-->
-            <!--</DataPropertyAtom>-->
-        <!--</Body>-->
-        <!--<Head>-->
-            <!--<ClassAtom>-->
-                <!--<Class IRI="#B"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-            <!--</ClassAtom>-->
-        <!--</Head>-->
-    <!--</DLSafeRule>-->
-    <!--<DLSafeRule>-->
-        <!--<Body>-->
-            <!--<DataPropertyAtom>-->
-                <!--<DataProperty IRI="#dr"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-                <!--<Variable IRI="urn:swrl#y"/>-->
-            <!--</DataPropertyAtom>-->
-            <!--<DataPropertyAtom>-->
-                <!--<DataProperty IRI="#dr"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-                <!--<Variable IRI="urn:swrl#z"/>-->
-            <!--</DataPropertyAtom>-->
-            <!--<BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#add">-->
-                <!--<Variable IRI="urn:swrl#t"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-                <!--<Variable IRI="urn:swrl#y"/>-->
-            <!--</BuiltInAtom>-->
-        <!--</Body>-->
-        <!--<Head>-->
-            <!--<ClassAtom>-->
-                <!--<Class IRI="#A"/>-->
-                <!--<Variable IRI="urn:swrl#x"/>-->
-            <!--</ClassAtom>-->
-        <!--</Head>-->
-    <!--</DLSafeRule>-->
+    <DLSafeRule>
+        <Body>
+            <ClassAtom>
+                <Class IRI="#B"/>
+                <Variable IRI="urn:swrl#x"/>
+            </ClassAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#F"/>
+                <Variable IRI="urn:swrl#x"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Body>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#op"/>
+                <Variable IRI="urn:swrl#x"/>
+                <Variable IRI="urn:swrl#y"/>
+            </ObjectPropertyAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#B"/>
+                <Variable IRI="urn:swrl#x"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Body>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#op"/>
+                <Variable IRI="urn:swrl#x"/>
+                <Variable IRI="urn:swrl#y"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#op"/>
+                <Variable IRI="urn:swrl#x"/>
+                <Variable IRI="urn:swrl#z"/>
+            </ObjectPropertyAtom>
+            <SameIndividualAtom>
+                <Variable IRI="urn:swrl#y"/>
+                <Variable IRI="urn:swrl#z"/>
+            </SameIndividualAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#A"/>
+                <Variable IRI="urn:swrl#x"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Body>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#op"/>
+                <Variable IRI="urn:swrl#x"/>
+                <Variable IRI="urn:swrl#y"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#op"/>
+                <Variable IRI="urn:swrl#x"/>
+                <Variable IRI="urn:swrl#z"/>
+            </ObjectPropertyAtom>
+            <DifferentIndividualsAtom>
+                <Variable IRI="urn:swrl#y"/>
+                <Variable IRI="urn:swrl#z"/>
+            </DifferentIndividualsAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#A"/>
+                <Variable IRI="urn:swrl#x"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Body>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#op"/>
+                <Variable IRI="urn:swrl#x"/>
+                <NamedIndividual IRI="#i"/>
+            </ObjectPropertyAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#B"/>
+                <Variable IRI="urn:swrl#x"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Body>
+            <DataPropertyAtom>
+                <DataProperty IRI="#dp"/>
+                <Variable IRI="urn:swrl#x"/>
+                <Literal datatypeIRI="&rdf;PlainLiteral">aaa</Literal>
+            </DataPropertyAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#F"/>
+                <Variable IRI="urn:swrl#x"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Body>
+            <DataPropertyAtom>
+                <DataProperty IRI="#dq"/>
+                <Variable IRI="urn:swrl#x"/>
+                <Variable IRI="urn:swrl#y"/>
+            </DataPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#dr"/>
+                <Variable IRI="urn:swrl#x"/>
+                <Variable IRI="urn:swrl#y"/>
+            </DataPropertyAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#B"/>
+                <Variable IRI="urn:swrl#x"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Body>
+            <DataPropertyAtom>
+                <DataProperty IRI="#dr"/>
+                <Variable IRI="urn:swrl#x"/>
+                <Variable IRI="urn:swrl#y"/>
+            </DataPropertyAtom>
+            <DataPropertyAtom>
+                <DataProperty IRI="#dr"/>
+                <Variable IRI="urn:swrl#x"/>
+                <Variable IRI="urn:swrl#z"/>
+            </DataPropertyAtom>
+            <BuiltInAtom IRI="http://www.w3.org/2003/11/swrlb#add">
+                <Variable IRI="urn:swrl#t"/>
+                <Variable IRI="urn:swrl#x"/>
+                <Variable IRI="urn:swrl#y"/>
+            </BuiltInAtom>
+        </Body>
+        <Head>
+            <ClassAtom>
+                <Class IRI="#A"/>
+                <Variable IRI="urn:swrl#x"/>
+            </ClassAtom>
+        </Head>
+    </DLSafeRule>
     <AnnotationAssertion>
         <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
         <IRI>#B</IRI>
         <Literal datatypeIRI="&rdf;PlainLiteral">A comment on a class.</Literal>
     </AnnotationAssertion>
-    <!--<AnnotationAssertion>-->
-        <!--<AnnotationProperty abbreviatedIRI="rdfs:comment"/>-->
-        <!--<IRI>#dta</IRI>-->
-        <!--<AnonymousIndividual nodeID="_:http://protege.org/ontologies/small.owl#genid1346265921471611000"/>-->
-    <!--</AnnotationAssertion>-->
+    <AnnotationAssertion>
+        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+        <IRI>#dta</IRI>
+        <AnonymousIndividual nodeID="_:http://protege.org/ontologies/small.owl#genid1346265921471611000"/>
+    </AnnotationAssertion>
     <SubAnnotationPropertyOf>
         <AnnotationProperty IRI="#ap"/>
         <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
