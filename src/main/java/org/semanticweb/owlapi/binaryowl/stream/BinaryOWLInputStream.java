@@ -86,7 +86,22 @@ public class BinaryOWLInputStream extends InputStream {
             return result;
         }
     }
-    
+
+    public <O extends OWLObject> List<O> readOWLObjectList() throws IOException, BinaryOWLParseException {
+        int size = readVariableLengthUnsignedInt(dataInput);
+        if(size == 0) {
+            return Collections.emptyList();
+        }
+        else {
+            List<O> result = new ArrayList<O>();
+            for(int i = 0; i < size; i++) {
+                O element = readOWLObject();
+                result.add(element);
+            }
+            return result;
+        }
+    }
+
     public IRI readIRI() throws IOException {
         return lookupTable.readIRI(dataInput);
     }

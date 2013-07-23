@@ -13,6 +13,7 @@ import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 import java.util.Set;
 import static org.semanticweb.owlapi.binaryowl.stream.BinaryOWLStreamUtil.*;
 /**
@@ -63,6 +64,12 @@ public class BinaryOWLOutputStream extends OutputStream {
         }
     }
 
+    public void writeOWLObjectList(List<? extends OWLObject> list) throws IOException {
+        writeCollectionSize(list.size(), dataOutput);
+        for(OWLObject object : list) {
+            writeOWLObject(object);
+        }
+    }
 
     public void writeIRI(IRI iri) throws IOException {
         lookupTable.writeIRI(iri, dataOutput);

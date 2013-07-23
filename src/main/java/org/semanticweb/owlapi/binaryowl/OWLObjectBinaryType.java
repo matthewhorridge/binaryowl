@@ -237,27 +237,27 @@ public class OWLObjectBinaryType<C extends OWLObject> {
 
 
 
-    public static final OWLObjectBinaryType<SWRLRule> SWRL_RULE = getInstance(74, SWRLRule.class, null);
+    public static final OWLObjectBinaryType<SWRLRule> SWRL_RULE = getInstance(74, SWRLRule.class, new SWRLRuleSerializer());
 
-    public static final OWLObjectBinaryType<SWRLDifferentIndividualsAtom> SWRL_DIFFERENT_INDIVIDUALS_ATOM = getInstance(75, SWRLDifferentIndividualsAtom.class, null);
+    public static final OWLObjectBinaryType<SWRLDifferentIndividualsAtom> SWRL_DIFFERENT_INDIVIDUALS_ATOM = getInstance(75, SWRLDifferentIndividualsAtom.class, new SWRLDifferentIndividualsAtomSerializer());
 
-    public static final OWLObjectBinaryType<SWRLSameIndividualAtom> SWRL_SAME_INDIVIDUAL_ATOM = getInstance(76, SWRLSameIndividualAtom.class, null);
+    public static final OWLObjectBinaryType<SWRLSameIndividualAtom> SWRL_SAME_INDIVIDUAL_ATOM = getInstance(76, SWRLSameIndividualAtom.class, new SWRLSameIndividualAtomSerializer());
 
-    public static final OWLObjectBinaryType<SWRLClassAtom> SWRL_CLASS_ATOM = getInstance(77, SWRLClassAtom.class, null);
+    public static final OWLObjectBinaryType<SWRLClassAtom> SWRL_CLASS_ATOM = getInstance(77, SWRLClassAtom.class, new SWRLClassAtomSerializer());
 
-    public static final OWLObjectBinaryType<SWRLDataRangeAtom> SWRL_DATA_RANGE_ATOM = getInstance(78, SWRLDataRangeAtom.class, null);
+    public static final OWLObjectBinaryType<SWRLDataRangeAtom> SWRL_DATA_RANGE_ATOM = getInstance(78, SWRLDataRangeAtom.class, new SWRLDataRangeAtomSerializer());
 
-    public static final OWLObjectBinaryType<SWRLObjectPropertyAtom> SWRL_OBJECT_PROPERTY_ATOM = getInstance(79, SWRLObjectPropertyAtom.class, null);
+    public static final OWLObjectBinaryType<SWRLObjectPropertyAtom> SWRL_OBJECT_PROPERTY_ATOM = getInstance(79, SWRLObjectPropertyAtom.class, new SWRLObjectPropertyAtomSerializer());
 
-    public static final OWLObjectBinaryType<SWRLDataPropertyAtom> SWRL_DATA_PROPERTY_ATOM = getInstance(80, SWRLDataPropertyAtom.class, null);
+    public static final OWLObjectBinaryType<SWRLDataPropertyAtom> SWRL_DATA_PROPERTY_ATOM = getInstance(80, SWRLDataPropertyAtom.class, new SWRLDataPropertyAtomSerializer());
 
-    public static final OWLObjectBinaryType<SWRLBuiltInAtom> SWRL_BUILT_IN_ATOM = getInstance(81, SWRLBuiltInAtom.class, null);
+    public static final OWLObjectBinaryType<SWRLBuiltInAtom> SWRL_BUILT_IN_ATOM = getInstance(81, SWRLBuiltInAtom.class, new SWRLBuiltInAtomSerializer());
 
-    public static final OWLObjectBinaryType<SWRLVariable> SWRL_VARIABLE = getInstance(82, SWRLVariable.class, null);
+    public static final OWLObjectBinaryType<SWRLVariable> SWRL_VARIABLE = getInstance(82, SWRLVariable.class, new SWRLVariableSerializer());
 
-    public static final OWLObjectBinaryType<SWRLIndividualArgument> SWRL_INDIVIDUAL_ARGUMENT = getInstance(83, SWRLIndividualArgument.class, null);
+    public static final OWLObjectBinaryType<SWRLIndividualArgument> SWRL_INDIVIDUAL_ARGUMENT = getInstance(83, SWRLIndividualArgument.class, new SWRLIndividualArgumentSerializer());
 
-    public static final OWLObjectBinaryType<SWRLLiteralArgument> SWRL_LITERAL_ARGUMENT = getInstance(84, SWRLLiteralArgument.class, null);
+    public static final OWLObjectBinaryType<SWRLLiteralArgument> SWRL_LITERAL_ARGUMENT = getInstance(84, SWRLLiteralArgument.class, new SWRLLiteralArgumentSerializer());
 
 
 
@@ -339,7 +339,8 @@ public class OWLObjectBinaryType<C extends OWLObject> {
     public static void write(OWLObject object, BinaryOWLOutputStream outputStream) throws IOException {
         OWLObjectBinaryType<OWLObject> type = OWLObjectBinaryType.<OWLObject>getType(object);
         outputStream.writeByte(type.getMarker());
-        type.getSerializer().write(object, outputStream);
+        final OWLObjectSerializer<OWLObject> serializer = type.getSerializer();
+        serializer.write(object, outputStream);
     }
 
     @SuppressWarnings("unchecked")
