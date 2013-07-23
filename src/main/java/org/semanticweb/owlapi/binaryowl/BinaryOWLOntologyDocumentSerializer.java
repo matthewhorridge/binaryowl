@@ -50,6 +50,7 @@ import org.semanticweb.owlapi.binaryowl.owlobject.BinaryOWLOntologyID;
 import org.semanticweb.owlapi.binaryowl.owlobject.SerializerBase;
 import org.semanticweb.owlapi.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.owlapi.binaryowl.stream.BinaryOWLOutputStream;
+import org.semanticweb.owlapi.binaryowl.v1.BinaryOWLV1DocumentBodySerializer;
 import org.semanticweb.owlapi.model.*;
 
 import java.io.*;
@@ -79,56 +80,8 @@ public class BinaryOWLOntologyDocumentSerializer extends SerializerBase {
         handler.handleBeginDocument();
         handler.handlePreamble(preamble);
 
-        BinaryOWLInputStream nonLookupTableStream = new BinaryOWLInputStream(dis, df, fileFormatVersion);
-
-        // Metadata
-        BinaryOWLMetadataChunk chunk = new BinaryOWLMetadataChunk(nonLookupTableStream);
-        BinaryOWLMetadata metadata = chunk.getMetadata();
-        handler.handleDocumentMetaData(metadata);
-
-        handler.handleBeginInitialDocumentBlock();
-
-        // Ontology ID
-        BinaryOWLOntologyID serializer = new BinaryOWLOntologyID(nonLookupTableStream);
-        OWLOntologyID ontologyID = serializer.getOntologyID();
-        handler.handleOntologyID(ontologyID);
-
-        // Imported ontologies
-        BinaryOWLImportsDeclarationSet importsDeclarationSet = new BinaryOWLImportsDeclarationSet(nonLookupTableStream);
-        Set<OWLImportsDeclaration> importsDeclarations = importsDeclarationSet.getImportsDeclarations();
-        handler.handleImportsDeclarations(importsDeclarations);
-
-        // IRI Table
-        IRILookupTable iriLookupTable = new IRILookupTable(dis);
-
-        // Used to be literal table
-        // Skip 1 byte - the interning marker
-        nonLookupTableStream.skip(1);
-
-
-        LookupTable lookupTable = new LookupTable(iriLookupTable);
-
-
-        BinaryOWLInputStream lookupTableStream = new BinaryOWLInputStream(dis, lookupTable, df, fileFormatVersion);
-
-        // Ontology Annotations
-        Set<OWLAnnotation> annotations = lookupTableStream.readOWLObjects();
-        handler.handleOntologyAnnotations(annotations);
-
-        // Axiom tables - axioms by type
-        for (int i = 0; i < AxiomType.AXIOM_TYPES.size(); i++) {
-            Set<OWLAxiom> axiomsOfType = lookupTableStream.readOWLObjects();
-            handler.handleAxioms(axiomsOfType);
-        }
-
-        handler.handleEndInitialDocumentBlock();
-        handler.handleBeginDocumentChangesBlock();
-        BinaryOWLInputStream changesInputStream = new BinaryOWLInputStream(dis, df, fileFormatVersion);
-        // Read any changes that have been appended to the end of the file - no look up table for this
-        readOntologyChanges(changesInputStream, handler);
-        handler.handleEndDocumentChangesBlock();
-        handler.handleEndDocument();
-        return new BinaryOWLOntologyDocumentFormat(metadata);
+        BinaryOWLDocumentBodySerializer serializer = new BinaryOWLV1DocumentBodySerializer();
+        return serializer.read(dis, handler, df);
     }
 
     private static DataInputStream getDataInputStream(InputStream inputStream) {
@@ -151,53 +104,59 @@ public class BinaryOWLOntologyDocumentSerializer extends SerializerBase {
         return serializer.getOntologyID();
     }
 
-    public void write(OWLOntology ontology, DataOutputStream dos, BinaryOWLMetadata documentMetadata) throws IOException {
-
-        BinaryOWLOntologyDocumentPreamble preamble = new BinaryOWLOntologyDocumentPreamble();
-        preamble.write(dos);
-
-        BinaryOWLVersion fileFormatVersion = preamble.getFileFormatVersion();
-        BinaryOWLOutputStream nonLookupTableOutputStream = new BinaryOWLOutputStream(dos, fileFormatVersion);
-
-        // Metadata
-        BinaryOWLMetadataChunk metadataChunk = new BinaryOWLMetadataChunk(documentMetadata);
-        metadataChunk.write(nonLookupTableOutputStream);
-
-        // Ontology ID
-        BinaryOWLOntologyID serializer = new BinaryOWLOntologyID(ontology.getOntologyID());
-        serializer.write(nonLookupTableOutputStream);
-
-        // Imports
-        BinaryOWLImportsDeclarationSet importsDeclarationSet = new BinaryOWLImportsDeclarationSet(ontology.getImportsDeclarations());
-        importsDeclarationSet.write(nonLookupTableOutputStream);
-
-        // IRI Table
-        IRILookupTable iriLookupTable = new IRILookupTable(ontology);
-        iriLookupTable.write(dos);
-
-        // Literal Table
-        LiteralLookupTable literalLookupTable = new LiteralLookupTable(ontology, iriLookupTable);
-        literalLookupTable.write(dos);
-
-        LookupTable lookupTable = new LookupTable(iriLookupTable);
-
-        BinaryOWLOutputStream lookupTableOutputStream = new BinaryOWLOutputStream(dos, lookupTable);
-
-        // Ontology Annotations
-        lookupTableOutputStream.writeOWLObjects(ontology.getAnnotations());
-
-        // Axiom tables - axioms by type
-        for (AxiomType<?> axiomType : AxiomType.AXIOM_TYPES) {
-            Set<? extends OWLAxiom> axioms = ontology.getAxioms(axiomType);
-            lookupTableOutputStream.writeOWLObjects(axioms);
-        }
-
-        dos.flush();
-    }
 
     public void write(OWLOntology ontology, DataOutputStream dos) throws IOException {
         write(ontology, dos, new BinaryOWLMetadata());
     }
+
+    public void write(OWLOntology ontology, DataOutputStream dos, BinaryOWLMetadata documentMetadata) throws IOException {
+
+        BinaryOWLOntologyDocumentPreamble preamble = new BinaryOWLOntologyDocumentPreamble();
+        preamble.write(dos);
+        dos.flush();
+
+        BinaryOWLDocumentBodySerializer serializer = new BinaryOWLV1DocumentBodySerializer();
+        serializer.write(ontology, dos, documentMetadata);
+
+//        BinaryOWLVersion fileFormatVersion = preamble.getFileFormatVersion();
+//        BinaryOWLOutputStream nonLookupTableOutputStream = new BinaryOWLOutputStream(dos, fileFormatVersion);
+//
+//        // Metadata
+//        BinaryOWLMetadataChunk metadataChunk = new BinaryOWLMetadataChunk(documentMetadata);
+//        metadataChunk.write(nonLookupTableOutputStream);
+//
+//        // Ontology ID
+//        BinaryOWLOntologyID serializer = new BinaryOWLOntologyID(ontology.getOntologyID());
+//        serializer.write(nonLookupTableOutputStream);
+//
+//        // Imports
+//        BinaryOWLImportsDeclarationSet importsDeclarationSet = new BinaryOWLImportsDeclarationSet(ontology.getImportsDeclarations());
+//        importsDeclarationSet.write(nonLookupTableOutputStream);
+//
+//        // IRI Table
+//        IRILookupTable iriLookupTable = new IRILookupTable(ontology);
+//        iriLookupTable.write(dos);
+//
+//        // Literal Table
+//        LiteralLookupTable literalLookupTable = new LiteralLookupTable(ontology, iriLookupTable);
+//        literalLookupTable.write(dos);
+//
+//        LookupTable lookupTable = new LookupTable(iriLookupTable);
+//
+//        BinaryOWLOutputStream lookupTableOutputStream = new BinaryOWLOutputStream(dos, lookupTable);
+//
+//        // Ontology Annotations
+//        lookupTableOutputStream.writeOWLObjects(ontology.getAnnotations());
+//
+//        // Axiom tables - axioms by type
+//        for (AxiomType<?> axiomType : AxiomType.AXIOM_TYPES) {
+//            Set<? extends OWLAxiom> axioms = ontology.getAxioms(axiomType);
+//            lookupTableOutputStream.writeOWLObjects(axioms);
+//        }
+//
+//        dos.flush();
+    }
+
 
     public void readOntologyChanges(BinaryOWLInputStream inputStream, BinaryOWLOntologyDocumentAppendedChangeHandler changeHandler) throws IOException, BinaryOWLParseException {
         byte chunkFollowsMarker = (byte) inputStream.read();
