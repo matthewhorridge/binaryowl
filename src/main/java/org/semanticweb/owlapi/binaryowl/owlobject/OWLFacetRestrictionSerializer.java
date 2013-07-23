@@ -106,6 +106,12 @@ public class OWLFacetRestrictionSerializer extends OWLObjectSerializer<OWLFacetR
         }
     }
 
+    /**
+     * Gets the {@link OWLFacet} for the specified facet marker index.
+     * @param facetMarker The facet marker index (>= 0, <= 10).
+     * @return The corresponding {@link OWLFacet}.
+     * @throws IndexOutOfBoundsException if the facet marker is out of the specified range.
+     */
     public static OWLFacet getFacet(int facetMarker) {
         if(facetMarker < 0 || facetMarker > 10) {
             throw new IndexOutOfBoundsException("Facet marker out of range");
