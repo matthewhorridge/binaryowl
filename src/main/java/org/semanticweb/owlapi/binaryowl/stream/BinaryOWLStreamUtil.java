@@ -37,7 +37,7 @@ public final class BinaryOWLStreamUtil {
         writeVariableLengthUnsignedInt(size, dataOutput);
     }
 
-    protected static void writeVariableLengthUnsignedInt(int i, DataOutput dataOutput) throws IOException {
+    public static void writeVariableLengthUnsignedInt(int i, DataOutput dataOutput) throws IOException {
         if(i < 0) {
             throw new RuntimeException("Cannot write int < 0");
         }
@@ -57,7 +57,7 @@ public final class BinaryOWLStreamUtil {
         }
     }
 
-    protected static int readVariableLengthUnsignedInt(DataInput dataInput) throws IOException {
+    public static int readVariableLengthUnsignedInt(DataInput dataInput) throws IOException {
         byte size = dataInput.readByte();
         if(size == 0) {
             return 0;
