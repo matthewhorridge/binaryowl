@@ -58,15 +58,83 @@ public class OWLFacetRestrictionSerializer extends OWLObjectSerializer<OWLFacetR
 
     @Override
     protected void writeObject(OWLFacetRestriction object, BinaryOWLOutputStream outputStream) throws IOException {
-        outputStream.writeInt(object.getFacet().ordinal());
+        int facetMarker = getFacetMarker(object.getFacet());
+        outputStream.writeInt(facetMarker);
         outputStream.writeOWLObject(object.getFacetValue());
     }
 
     @Override
     protected OWLFacetRestriction readObject(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
         int facetIndex = inputStream.readInt();
-        OWLFacet facet = OWLFacet.values()[facetIndex];
+        OWLFacet facet = getFacet(facetIndex);
         OWLLiteral literal = inputStream.readOWLObject();
         return inputStream.getDataFactory().getOWLFacetRestriction(facet, literal);
+    }
+
+
+    /**
+     * Gets the facet marker for a given facet.
+     * @param facet The facet.  Not {@code null}.
+     * @return The marker for the facet.
+     */
+    public static int getFacetMarker(OWLFacet facet) {
+        switch (facet) {
+            case LENGTH:
+                return 0;
+            case MIN_LENGTH:
+                return 1;
+            case MAX_LENGTH:
+                return 2;
+            case PATTERN:
+                return 3;
+            case MIN_INCLUSIVE:
+                return 4;
+            case MIN_EXCLUSIVE:
+                return 5;
+            case MAX_INCLUSIVE:
+                return 6;
+            case MAX_EXCLUSIVE:
+                return 7;
+            case TOTAL_DIGITS:
+                return 8;
+            case FRACTION_DIGITS:
+                return 9;
+            case LANG_RANGE:
+                return 10;
+            default:
+                throw new RuntimeException("Illegal state.  Case not covered");
+        }
+    }
+
+    public static OWLFacet getFacet(int facetMarker) {
+        if(facetMarker < 0 || facetMarker > 10) {
+            throw new IndexOutOfBoundsException("Facet marker out of range");
+        }
+        switch (facetMarker) {
+            case 0:
+                return OWLFacet.LENGTH;
+            case 1:
+                return OWLFacet.MIN_LENGTH;
+            case 2:
+                return OWLFacet.MAX_LENGTH;
+            case 3:
+                return OWLFacet.PATTERN;
+            case 4:
+                return OWLFacet.MIN_INCLUSIVE;
+            case 5:
+                return OWLFacet.MIN_EXCLUSIVE;
+            case 6:
+                return OWLFacet.MAX_INCLUSIVE;
+            case 7:
+                return OWLFacet.MAX_EXCLUSIVE;
+            case 8:
+                return OWLFacet.TOTAL_DIGITS;
+            case 9:
+                return OWLFacet.FRACTION_DIGITS;
+            case 10:
+                return OWLFacet.LANG_RANGE;
+            default:
+                throw new IllegalArgumentException("Facet marker out of range");
+        }
     }
 }
