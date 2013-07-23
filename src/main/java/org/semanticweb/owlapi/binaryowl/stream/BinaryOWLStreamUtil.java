@@ -1,8 +1,6 @@
 package org.semanticweb.owlapi.binaryowl.stream;
 
-import java.io.DataInput;
-import java.io.DataOutput;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -75,4 +73,20 @@ public final class BinaryOWLStreamUtil {
             throw new RuntimeException();
         }
     }
+
+
+    public static DataInputStream getDataInputStream(InputStream inputStream) {
+        DataInputStream dis;
+        if(inputStream instanceof DataInputStream) {
+            dis = (DataInputStream) inputStream;
+        }
+        else {
+            dis = new DataInputStream(inputStream);
+        }
+        return dis;
+    }
+
 }
+
+
+
