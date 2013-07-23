@@ -328,7 +328,7 @@ public class OWLObjectBinaryType<C extends OWLObject> {
         if(typeMarker <= 0) {
             throw new BinaryOWLParseException("Invalid type marker: " + typeMarker);
         }
-        if(typeMarker >= values.size()) {
+        if(typeMarker >= 85) {
             throw new BinaryOWLParseException("Invalid type marker: " + typeMarker);
         }
         OWLObjectBinaryType<C> type = getType(typeMarker);
