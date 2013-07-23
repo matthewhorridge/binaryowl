@@ -603,11 +603,6 @@
         <IRI>#B</IRI>
         <Literal datatypeIRI="&rdf;PlainLiteral">A comment on a class.</Literal>
     </AnnotationAssertion>
-    <AnnotationAssertion>
-        <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
-        <IRI>#dta</IRI>
-        <AnonymousIndividual nodeID="_:http://protege.org/ontologies/small.owl#genid1346265921471611000"/>
-    </AnnotationAssertion>
     <SubAnnotationPropertyOf>
         <AnnotationProperty IRI="#ap"/>
         <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
