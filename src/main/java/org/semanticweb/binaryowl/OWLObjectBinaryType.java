@@ -48,6 +48,8 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
 
+import static com.google.common.base.Preconditions.checkPositionIndex;
+
 /**
  * Author: Matthew Horridge<br>
  * Stanford University<br>
@@ -389,12 +391,7 @@ public class OWLObjectBinaryType<C extends OWLObject> {
      */
     public static <C extends OWLObject> C read(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
         byte typeMarker = inputStream.readByte();
-        if(typeMarker <= 0) {
-            throw new BinaryOWLParseException("Invalid type marker: " + typeMarker);
-        }
-        if(typeMarker >= 85) {
-            throw new BinaryOWLParseException("Invalid type marker: " + typeMarker);
-        }
+        checkPositionIndex(0, 84, "Invalid type marker");
         OWLObjectBinaryType<C> type = getType(typeMarker);
         return type.getSerializer().read(inputStream);
     }
