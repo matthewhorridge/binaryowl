@@ -2,9 +2,9 @@ package org.semanticweb.binaryowl.stream;
 
 import org.semanticweb.binaryowl.BinaryOWLParseException;
 import org.semanticweb.binaryowl.BinaryOWLVersion;
-import org.semanticweb.binaryowl.OWLObjectBinaryType;
+import org.semanticweb.binaryowl.owlobject.OWLObjectBinaryType;
 import org.semanticweb.binaryowl.lookup.LookupTable;
-import org.semanticweb.binaryowl.owlobject.OWLLiteralSerializer;
+import org.semanticweb.binaryowl.owlobject.serializer.OWLLiteralSerializer;
 import org.semanticweb.owlapi.model.*;
 
 import java.io.DataInputStream;

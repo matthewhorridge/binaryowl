@@ -1,7 +1,7 @@
 package org.semanticweb.binaryowl.tests;
 
 import org.junit.Test;
-import org.semanticweb.binaryowl.owlobject.OWLFacetRestrictionSerializer;
+import org.semanticweb.binaryowl.owlobject.serializer.OWLFacetRestrictionSerializer;
 import org.semanticweb.owlapi.vocab.OWLFacet;
 
 import static junit.framework.Assert.assertEquals;

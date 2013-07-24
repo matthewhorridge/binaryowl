@@ -37,35 +37,31 @@
  * limitations under the License.
  */
 
-package org.semanticweb.binaryowl.change.serializer;
+package org.semanticweb.binaryowl.owlapi;
 
-import org.semanticweb.binaryowl.BinaryOWLParseException;
-import org.semanticweb.binaryowl.owlobject.serializer.BinaryOWLOntologyID;
-import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
-import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
-import org.semanticweb.owlapi.change.SetOntologyIDData;
-import org.semanticweb.owlapi.model.OWLOntologyID;
+import org.semanticweb.binaryowl.BinaryOWLOntologyDocumentAppendedChangeHandler;
+import org.semanticweb.binaryowl.change.OntologyChangeDataList;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyChange;
 
-import java.io.IOException;
+import java.util.List;
 
 /**
  * Author: Matthew Horridge<br>
  * Stanford University<br>
  * Bio-Medical Informatics Research Group<br>
- * Date: 27/04/2012
+ * Date: 11/05/2012
  */
-public class SetOntologyIDDataSerializer extends OntologyChangeDataSerializer<SetOntologyIDData> {
+public class ApplyOntologyChangesHandler implements BinaryOWLOntologyDocumentAppendedChangeHandler {
 
-    @Override
-    public void write(SetOntologyIDData recordData, BinaryOWLOutputStream outputStream) throws IOException {
-        OWLOntologyID id = recordData.getNewId();
-        BinaryOWLOntologyID serializer = new BinaryOWLOntologyID(id);
-        serializer.write(outputStream);
+    private OWLOntology ontology;
+
+    public ApplyOntologyChangesHandler(OWLOntology ontology) {
+        this.ontology = ontology;
     }
 
-    @Override
-    public SetOntologyIDData read(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
-        BinaryOWLOntologyID serializer = new BinaryOWLOntologyID(inputStream);
-        return new SetOntologyIDData(serializer.getOntologyID());
+    public void handleChanges(OntologyChangeDataList changesList) {
+        List<OWLOntologyChange> changeList = changesList.getOntologyChanges(ontology);
+        ontology.getOWLOntologyManager().applyChanges(changeList);
     }
 }

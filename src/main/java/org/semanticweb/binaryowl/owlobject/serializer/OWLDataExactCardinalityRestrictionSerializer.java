@@ -1,33 +1,33 @@
 /*
  * This file is part of the OWL API.
- *
+ *  
  * The contents of this file are subject to the LGPL License, Version 3.0.
  *
  * Copyright (C) 2011, The University of Manchester
- *
+ *  
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ *  
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ *  
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  *
- *
+ *  
  * Alternatively, the contents of this file may be used under the terms of the Apache License, Version 2.0
  * in which case, the provisions of the Apache License Version 2.0 are applicable instead of those above.
  *
  * Copyright 2011, The University of Manchester
- *
+ *  
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *  
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -37,35 +37,23 @@
  * limitations under the License.
  */
 
-package org.semanticweb.binaryowl.change.serializer;
+package org.semanticweb.binaryowl.owlobject.serializer;
 
-import org.semanticweb.binaryowl.BinaryOWLParseException;
-import org.semanticweb.binaryowl.owlobject.serializer.BinaryOWLOntologyID;
-import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
-import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
-import org.semanticweb.owlapi.change.SetOntologyIDData;
-import org.semanticweb.owlapi.model.OWLOntologyID;
-
-import java.io.IOException;
+import org.semanticweb.owlapi.model.OWLDataExactCardinality;
+import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
+import org.semanticweb.owlapi.model.OWLDataRange;
 
 /**
  * Author: Matthew Horridge<br>
  * Stanford University<br>
  * Bio-Medical Informatics Research Group<br>
- * Date: 27/04/2012
+ * Date: 25/04/2012
  */
-public class SetOntologyIDDataSerializer extends OntologyChangeDataSerializer<SetOntologyIDData> {
+public class OWLDataExactCardinalityRestrictionSerializer extends OWLDataCardinalityRestrictionSerializer<OWLDataExactCardinality> {
 
     @Override
-    public void write(SetOntologyIDData recordData, BinaryOWLOutputStream outputStream) throws IOException {
-        OWLOntologyID id = recordData.getNewId();
-        BinaryOWLOntologyID serializer = new BinaryOWLOntologyID(id);
-        serializer.write(outputStream);
-    }
-
-    @Override
-    public SetOntologyIDData read(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
-        BinaryOWLOntologyID serializer = new BinaryOWLOntologyID(inputStream);
-        return new SetOntologyIDData(serializer.getOntologyID());
+    protected OWLDataExactCardinality createRestriction(int cardinality, OWLDataPropertyExpression property, OWLDataRange filler, OWLDataFactory dataFactory) {
+        return dataFactory.getOWLDataExactCardinality(cardinality, property, filler);
     }
 }

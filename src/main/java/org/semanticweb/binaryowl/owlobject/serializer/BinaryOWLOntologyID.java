@@ -1,33 +1,33 @@
 /*
  * This file is part of the OWL API.
- *
+ *  
  * The contents of this file are subject to the LGPL License, Version 3.0.
  *
  * Copyright (C) 2011, The University of Manchester
- *
+ *  
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ *  
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ *  
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  *
- *
+ *  
  * Alternatively, the contents of this file may be used under the terms of the Apache License, Version 2.0
  * in which case, the provisions of the Apache License Version 2.0 are applicable instead of those above.
  *
  * Copyright 2011, The University of Manchester
- *
+ *  
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *  
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -37,66 +37,84 @@
  * limitations under the License.
  */
 
-package org.semanticweb.binaryowl.change;
+package org.semanticweb.binaryowl.owlobject.serializer;
 
 import org.semanticweb.binaryowl.BinaryOWLParseException;
-import org.semanticweb.binaryowl.owlobject.serializer.BinaryOWLOntologyID;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
-import org.semanticweb.owlapi.change.OWLOntologyChangeData;
+import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntologyID;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Author: Matthew Horridge<br>
  * Stanford University<br>
  * Bio-Medical Informatics Research Group<br>
- * Date: 11/05/2012
+ * Date: 30/04/2012
  */
-public class OntologyChangeRecordRun {
+public class BinaryOWLOntologyID {
 
+    private static final int ANONYMOUS_ONTOLOGY_MARKER = 0;
+    
+    private static final int ONTOLOGY_IRI_NO_VERSION_IRI_MARKER = 1;
+    
+    private static final int ONTOLOGY_IRI_PLUS_VERSION_IRI_MARKER = 2;
+    
+    
     private OWLOntologyID ontologyID;
 
-    private List<OWLOntologyChangeData> records;
-
-    public OntologyChangeRecordRun(OWLOntologyID ontologyID, List<OWLOntologyChangeData> records) {
+    public BinaryOWLOntologyID(OWLOntologyID ontologyID) {
         this.ontologyID = ontologyID;
-        this.records = new ArrayList<OWLOntologyChangeData>(records);
-    }
-
-    public OntologyChangeRecordRun(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
-        read(inputStream);
     }
     
+    public BinaryOWLOntologyID(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
+        read(inputStream);
+    }
+
     public OWLOntologyID getOntologyID() {
         return ontologyID;
     }
 
-    public List<OWLOntologyChangeData> getChangeDataList() {
-        return new ArrayList<OWLOntologyChangeData>(records);
-    }
-
     public void write(BinaryOWLOutputStream outputStream) throws IOException {
-        BinaryOWLOntologyID serializer = new BinaryOWLOntologyID(ontologyID);
-        serializer.write(outputStream);
-
-        outputStream.writeInt(records.size());
-        for(OWLOntologyChangeData info : records) {
-            OntologyChangeDataType.write(info, outputStream);
+        if(ontologyID.isAnonymous()) {
+            outputStream.writeByte(ANONYMOUS_ONTOLOGY_MARKER);
+        }
+        else {
+            if(ontologyID.getVersionIRI() == null) {
+                outputStream.writeByte(ONTOLOGY_IRI_NO_VERSION_IRI_MARKER);
+                outputStream.writeIRI(ontologyID.getOntologyIRI());
+            }
+            else {
+                outputStream.writeByte(ONTOLOGY_IRI_PLUS_VERSION_IRI_MARKER);
+                outputStream.writeIRI(ontologyID.getOntologyIRI());
+                outputStream.writeIRI(ontologyID.getVersionIRI());
+            }
         }
     }
     
     private void read(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
-        BinaryOWLOntologyID idSerializer = new BinaryOWLOntologyID(inputStream);
-        ontologyID = idSerializer.getOntologyID();
-        int recordCount = inputStream.readInt();
-        records = new ArrayList<OWLOntologyChangeData>(recordCount + 1);
-        for(int i = 0; i < recordCount; i++) {
-            OWLOntologyChangeData info = OntologyChangeDataType.read(inputStream);
-            records.add(info);
+        byte marker = inputStream.readByte();
+        if(marker == ANONYMOUS_ONTOLOGY_MARKER) {
+            ontologyID = new OWLOntologyID();
+        }
+        else {
+            if(marker == 1) {
+                IRISerializer serializer = new IRISerializer();
+                IRI ontologyIRI = serializer.readObject(inputStream);
+                ontologyID = new OWLOntologyID(ontologyIRI);
+            }
+            else if(marker == 2) {
+                IRISerializer serializer = new IRISerializer();
+                IRI ontologyIRI = serializer.readObject(inputStream);
+                IRI versionIRI = serializer.readObject(inputStream);
+                ontologyID = new OWLOntologyID(ontologyIRI, versionIRI);
+            }
+            else {
+                throw new BinaryOWLParseException("Unexpected OntologyID marker: " + marker);
+            }
         }
     }
+    
+    
 }

@@ -41,7 +41,7 @@ package org.semanticweb.binaryowl;
 
 import org.semanticweb.binaryowl.change.OntologyChangeDataList;
 import org.semanticweb.binaryowl.doc.OWLOntologyDocument;
-import org.semanticweb.binaryowl.owlobject.SerializerBase;
+import org.semanticweb.binaryowl.owlobject.serializer.SerializerBase;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLStreamUtil;
 import org.semanticweb.binaryowl.versioning.BinaryOWLDocumentBodySerializer;

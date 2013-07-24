@@ -37,66 +37,37 @@
  * limitations under the License.
  */
 
-package org.semanticweb.binaryowl.change;
+package org.semanticweb.binaryowl.owlobject.serializer;
 
 import org.semanticweb.binaryowl.BinaryOWLParseException;
-import org.semanticweb.binaryowl.owlobject.serializer.BinaryOWLOntologyID;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
-import org.semanticweb.owlapi.change.OWLOntologyChangeData;
-import org.semanticweb.owlapi.model.OWLOntologyID;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLAnnotation;
+import org.semanticweb.owlapi.model.OWLAnnotationProperty;
+import org.semanticweb.owlapi.model.OWLAnnotationPropertyDomainAxiom;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Author: Matthew Horridge<br>
  * Stanford University<br>
  * Bio-Medical Informatics Research Group<br>
- * Date: 11/05/2012
+ * Date: 25/04/2012
  */
-public class OntologyChangeRecordRun {
+public class OWLAnnotationPropertyDomainAxiomSerializer extends AbstractAxiomSerializer<OWLAnnotationPropertyDomainAxiom> {
 
-    private OWLOntologyID ontologyID;
-
-    private List<OWLOntologyChangeData> records;
-
-    public OntologyChangeRecordRun(OWLOntologyID ontologyID, List<OWLOntologyChangeData> records) {
-        this.ontologyID = ontologyID;
-        this.records = new ArrayList<OWLOntologyChangeData>(records);
+    @Override
+    protected void writeAxiom(OWLAnnotationPropertyDomainAxiom axiom, BinaryOWLOutputStream outputStream) throws IOException {
+        outputStream.writeOWLObject(axiom.getProperty());
+        outputStream.writeOWLObject(axiom.getDomain());
     }
 
-    public OntologyChangeRecordRun(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
-        read(inputStream);
-    }
-    
-    public OWLOntologyID getOntologyID() {
-        return ontologyID;
-    }
-
-    public List<OWLOntologyChangeData> getChangeDataList() {
-        return new ArrayList<OWLOntologyChangeData>(records);
-    }
-
-    public void write(BinaryOWLOutputStream outputStream) throws IOException {
-        BinaryOWLOntologyID serializer = new BinaryOWLOntologyID(ontologyID);
-        serializer.write(outputStream);
-
-        outputStream.writeInt(records.size());
-        for(OWLOntologyChangeData info : records) {
-            OntologyChangeDataType.write(info, outputStream);
-        }
-    }
-    
-    private void read(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
-        BinaryOWLOntologyID idSerializer = new BinaryOWLOntologyID(inputStream);
-        ontologyID = idSerializer.getOntologyID();
-        int recordCount = inputStream.readInt();
-        records = new ArrayList<OWLOntologyChangeData>(recordCount + 1);
-        for(int i = 0; i < recordCount; i++) {
-            OWLOntologyChangeData info = OntologyChangeDataType.read(inputStream);
-            records.add(info);
-        }
+    @Override
+    protected OWLAnnotationPropertyDomainAxiom readAxiom(BinaryOWLInputStream inputStream, Set<OWLAnnotation> annotations) throws IOException, BinaryOWLParseException {
+        OWLAnnotationProperty property = inputStream.readOWLObject();
+        IRI domain = inputStream.readOWLObject();
+        return inputStream.getDataFactory().getOWLAnnotationPropertyDomainAxiom(property, domain, annotations);
     }
 }

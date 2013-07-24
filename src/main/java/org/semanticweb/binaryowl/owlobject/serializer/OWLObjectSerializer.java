@@ -1,33 +1,33 @@
 /*
  * This file is part of the OWL API.
- *
+ *  
  * The contents of this file are subject to the LGPL License, Version 3.0.
  *
  * Copyright (C) 2011, The University of Manchester
- *
+ *  
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- *
+ *  
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- *
+ *  
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see http://www.gnu.org/licenses/.
  *
- *
+ *  
  * Alternatively, the contents of this file may be used under the terms of the Apache License, Version 2.0
  * in which case, the provisions of the Apache License Version 2.0 are applicable instead of those above.
  *
  * Copyright 2011, The University of Manchester
- *
+ *  
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ *  
  * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
@@ -37,66 +37,56 @@
  * limitations under the License.
  */
 
-package org.semanticweb.binaryowl.change;
+package org.semanticweb.binaryowl.owlobject.serializer;
 
 import org.semanticweb.binaryowl.BinaryOWLParseException;
-import org.semanticweb.binaryowl.owlobject.serializer.BinaryOWLOntologyID;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
-import org.semanticweb.owlapi.change.OWLOntologyChangeData;
-import org.semanticweb.owlapi.model.OWLOntologyID;
+import org.semanticweb.owlapi.model.OWLObject;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Author: Matthew Horridge<br>
  * Stanford University<br>
  * Bio-Medical Informatics Research Group<br>
- * Date: 11/05/2012
+ * Date: 25/04/2012
+ * <p>
+ *     An inteface to an object that can read and write the binary OWL representation of OWLObjects.  All subclasses
+ *     of this class are thread safe.
+ * </p>
  */
-public class OntologyChangeRecordRun {
+public abstract class OWLObjectSerializer<C extends OWLObject> extends SerializerBase {
 
-    private OWLOntologyID ontologyID;
 
-    private List<OWLOntologyChangeData> records;
-
-    public OntologyChangeRecordRun(OWLOntologyID ontologyID, List<OWLOntologyChangeData> records) {
-        this.ontologyID = ontologyID;
-        this.records = new ArrayList<OWLOntologyChangeData>(records);
+    @SuppressWarnings("unchecked")
+    final public void write(C object, BinaryOWLOutputStream outputStream) throws IOException {
+        writeObject(object, outputStream);
     }
 
-    public OntologyChangeRecordRun(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
-        read(inputStream);
-    }
-    
-    public OWLOntologyID getOntologyID() {
-        return ontologyID;
+    final public C read(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
+        return readObject(inputStream);
     }
 
-    public List<OWLOntologyChangeData> getChangeDataList() {
-        return new ArrayList<OWLOntologyChangeData>(records);
-    }
+    /**
+     * Writes a binary representation of an {@link OWLObject} to a {@link DataOutputStream}.  This method does NOT write the object type marker out -
+     * only the data that represents the object.
+     *
+     *
+     *
+     * @param object The object to be written.  Not <code>null</code>.
+     * @param outputStream
+     * @throws IOException if there was a problem with writing the object to the specified stream..
+     */
+    protected abstract void writeObject(C object, BinaryOWLOutputStream outputStream) throws IOException;
 
-    public void write(BinaryOWLOutputStream outputStream) throws IOException {
-        BinaryOWLOntologyID serializer = new BinaryOWLOntologyID(ontologyID);
-        serializer.write(outputStream);
-
-        outputStream.writeInt(records.size());
-        for(OWLOntologyChangeData info : records) {
-            OntologyChangeDataType.write(info, outputStream);
-        }
-    }
-    
-    private void read(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
-        BinaryOWLOntologyID idSerializer = new BinaryOWLOntologyID(inputStream);
-        ontologyID = idSerializer.getOntologyID();
-        int recordCount = inputStream.readInt();
-        records = new ArrayList<OWLOntologyChangeData>(recordCount + 1);
-        for(int i = 0; i < recordCount; i++) {
-            OWLOntologyChangeData info = OntologyChangeDataType.read(inputStream);
-            records.add(info);
-        }
-    }
+    /**
+     * Reads the binary representation of an {@link OWLObject} from a {@link DataOutputStream}.  The representation is
+     * NOT prefixed with the type marker for the object type.
+     *
+     *
+     * @param inputStream@throws IOException If there was a problem reading the object from the stream.
+     */
+    protected abstract C readObject(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException;
 }

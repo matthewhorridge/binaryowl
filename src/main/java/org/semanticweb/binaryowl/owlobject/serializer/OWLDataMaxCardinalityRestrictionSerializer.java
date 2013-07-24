@@ -37,35 +37,23 @@
  * limitations under the License.
  */
 
-package org.semanticweb.binaryowl.change.serializer;
+package org.semanticweb.binaryowl.owlobject.serializer;
 
-import org.semanticweb.binaryowl.BinaryOWLParseException;
-import org.semanticweb.binaryowl.owlobject.serializer.BinaryOWLOntologyID;
-import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
-import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
-import org.semanticweb.owlapi.change.SetOntologyIDData;
-import org.semanticweb.owlapi.model.OWLOntologyID;
-
-import java.io.IOException;
+import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLDataMaxCardinality;
+import org.semanticweb.owlapi.model.OWLDataPropertyExpression;
+import org.semanticweb.owlapi.model.OWLDataRange;
 
 /**
  * Author: Matthew Horridge<br>
  * Stanford University<br>
  * Bio-Medical Informatics Research Group<br>
- * Date: 27/04/2012
+ * Date: 25/04/2012
  */
-public class SetOntologyIDDataSerializer extends OntologyChangeDataSerializer<SetOntologyIDData> {
+public class OWLDataMaxCardinalityRestrictionSerializer extends OWLDataCardinalityRestrictionSerializer<OWLDataMaxCardinality> {
 
     @Override
-    public void write(SetOntologyIDData recordData, BinaryOWLOutputStream outputStream) throws IOException {
-        OWLOntologyID id = recordData.getNewId();
-        BinaryOWLOntologyID serializer = new BinaryOWLOntologyID(id);
-        serializer.write(outputStream);
-    }
-
-    @Override
-    public SetOntologyIDData read(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
-        BinaryOWLOntologyID serializer = new BinaryOWLOntologyID(inputStream);
-        return new SetOntologyIDData(serializer.getOntologyID());
+    protected OWLDataMaxCardinality createRestriction(int cardinality, OWLDataPropertyExpression property, OWLDataRange filler, OWLDataFactory dataFactory) {
+        return dataFactory.getOWLDataMaxCardinality(cardinality,  property, filler);
     }
 }

@@ -40,7 +40,7 @@
 package org.semanticweb.binaryowl.change.serializer;
 
 import org.semanticweb.binaryowl.BinaryOWLParseException;
-import org.semanticweb.binaryowl.owlobject.OWLAnnotationSerializer;
+import org.semanticweb.binaryowl.owlobject.serializer.OWLAnnotationSerializer;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
 import org.semanticweb.owlapi.change.AddOntologyAnnotationData;

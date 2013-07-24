@@ -1,7 +1,7 @@
 package org.semanticweb.binaryowl.tests;
 
 import org.junit.Test;
-import org.semanticweb.binaryowl.OWLObjectBinaryType;
+import org.semanticweb.binaryowl.owlobject.OWLObjectBinaryType;
 
 import static junit.framework.Assert.assertEquals;
 
