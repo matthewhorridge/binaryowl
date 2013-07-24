@@ -42,7 +42,9 @@ package org.semanticweb.binaryowl.owlobject;
 import org.semanticweb.binaryowl.BinaryOWLParseException;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
-import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.OWLClassExpression;
+import org.semanticweb.owlapi.model.OWLObjectAllValuesFrom;
+import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 
 import java.io.IOException;
 

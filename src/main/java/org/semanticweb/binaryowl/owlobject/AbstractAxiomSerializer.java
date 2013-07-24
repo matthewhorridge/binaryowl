@@ -45,7 +45,7 @@ import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAxiom;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.Set;
 
 /**

@@ -12,7 +12,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
-import static org.semanticweb.binaryowl.stream.BinaryOWLStreamUtil.*;
+import static org.semanticweb.binaryowl.stream.BinaryOWLStreamUtil.ListBackedSet;
+import static org.semanticweb.binaryowl.stream.BinaryOWLStreamUtil.readVariableLengthUnsignedInt;
 
 /**
  * Author: Matthew Horridge<br>

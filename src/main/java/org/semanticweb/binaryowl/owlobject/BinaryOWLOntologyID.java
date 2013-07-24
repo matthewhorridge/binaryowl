@@ -45,7 +45,7 @@ import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLOntologyID;
 
-import java.io.*;
+import java.io.IOException;
 
 /**
  * Author: Matthew Horridge<br>

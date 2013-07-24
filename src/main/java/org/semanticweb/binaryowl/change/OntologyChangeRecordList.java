@@ -42,8 +42,8 @@ package org.semanticweb.binaryowl.change;
 import org.semanticweb.binaryowl.BinaryOWLMetadata;
 import org.semanticweb.binaryowl.BinaryOWLParseException;
 import org.semanticweb.binaryowl.chunk.ChunkUtil;
-import org.semanticweb.binaryowl.chunk.TimeStampedMetadataChunk;
 import org.semanticweb.binaryowl.chunk.SkipSetting;
+import org.semanticweb.binaryowl.chunk.TimeStampedMetadataChunk;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
 import org.semanticweb.owlapi.change.*;
@@ -51,7 +51,9 @@ import org.semanticweb.owlapi.model.OWLEntity;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
 import org.semanticweb.owlapi.model.OWLOntologyID;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.util.*;
 
 /**

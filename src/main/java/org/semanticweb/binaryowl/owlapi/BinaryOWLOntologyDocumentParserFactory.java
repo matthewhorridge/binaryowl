@@ -39,7 +39,6 @@
 
 package org.semanticweb.binaryowl.owlapi;
 
-import org.semanticweb.binaryowl.owlapi.BinaryOWLOntologyDocumentParser;
 import org.semanticweb.owlapi.io.OWLParser;
 import org.semanticweb.owlapi.io.OWLParserFactory;
 import org.semanticweb.owlapi.model.OWLOntologyManager;

@@ -39,10 +39,10 @@
 
 package org.semanticweb.binaryowl.owlobject;
 
-import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.binaryowl.BinaryOWLParseException;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
+import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
 
 import java.io.IOException;

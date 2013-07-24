@@ -15,7 +15,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 import java.util.Set;
-import static org.semanticweb.binaryowl.stream.BinaryOWLStreamUtil.*;
+
+import static org.semanticweb.binaryowl.stream.BinaryOWLStreamUtil.writeCollectionSize;
 /**
  * Author: Matthew Horridge<br>
  * Stanford University<br>

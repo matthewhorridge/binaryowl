@@ -6,7 +6,6 @@ import org.semanticweb.binaryowl.chunk.BinaryOWLMetadataChunk;
 import org.semanticweb.binaryowl.lookup.IRILookupTable;
 import org.semanticweb.binaryowl.lookup.LiteralLookupTable;
 import org.semanticweb.binaryowl.lookup.LookupTable;
-import org.semanticweb.binaryowl.owlapi.BinaryOWLOntologyDocumentFormat;
 import org.semanticweb.binaryowl.owlobject.BinaryOWLImportsDeclarationSet;
 import org.semanticweb.binaryowl.owlobject.BinaryOWLOntologyID;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;

@@ -39,7 +39,8 @@
 
 package org.semanticweb.binaryowl.chunk;
 
-import java.io.*;
+import java.io.DataInput;
+import java.io.IOException;
 
 /**
  * Author: Matthew Horridge<br>

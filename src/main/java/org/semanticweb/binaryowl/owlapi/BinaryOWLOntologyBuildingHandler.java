@@ -5,11 +5,13 @@ import org.semanticweb.binaryowl.BinaryOWLOntologyDocumentHandler;
 import org.semanticweb.binaryowl.BinaryOWLOntologyDocumentPreamble;
 import org.semanticweb.binaryowl.BinaryOWLParseException;
 import org.semanticweb.binaryowl.change.OntologyChangeDataList;
-import org.semanticweb.binaryowl.owlapi.BinaryOWLOntologyDocumentFormat;
 import org.semanticweb.owlapi.change.*;
 import org.semanticweb.owlapi.model.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Author: Matthew Horridge<br>

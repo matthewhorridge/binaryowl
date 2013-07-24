@@ -43,7 +43,9 @@ import org.semanticweb.binaryowl.OWLOntologyDocument;
 import org.semanticweb.owlapi.model.*;
 import uk.ac.manchester.cs.owl.owlapi.*;
 
-import java.io.*;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 import java.util.*;
 
 /**

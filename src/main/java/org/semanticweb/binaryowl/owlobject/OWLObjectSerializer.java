@@ -44,7 +44,8 @@ import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
 import org.semanticweb.owlapi.model.OWLObject;
 
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.IOException;
 
 /**
  * Author: Matthew Horridge<br>

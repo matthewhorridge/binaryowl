@@ -45,8 +45,14 @@ import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLLiteralImplNoCompression;
 
-import java.io.*;
-import java.util.*;
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Author: Matthew Horridge<br>

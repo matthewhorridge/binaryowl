@@ -45,9 +45,12 @@ import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLStreamUtil;
 import org.semanticweb.binaryowl.versioning.BinaryOWLDocumentBodySerializer;
 import org.semanticweb.binaryowl.versioning.BinaryOWLDocumentBodySerializerSelector;
-import org.semanticweb.owlapi.model.*;
+import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.UnloadableImportException;
 
 import java.io.*;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Author: Matthew Horridge<br>
@@ -59,7 +62,21 @@ public class BinaryOWLOntologyDocumentSerializer extends SerializerBase {
 
     public static final byte CHUNK_FOLLOWS_MARKER = 33;
 
+    /**
+     * Reads an {@link OWLOntologyDocument} that is stored in binary OWL.
+     * @param inputStream The input stream to read the document from.  Not {@code null}.
+     * @param handler The handler that handels document elements as they are read.  Not {@code null}.
+     * @param df An {@link OWLDataFactory} that can be used to instantiate {@link org.semanticweb.owlapi.model.OWLObject}s.  Not {@code null}.
+     * @param <E> The type of exception thrown by the handler.
+     * @throws IOException If there was a problem reading from the input stream.
+     * @throws BinaryOWLParseException If the binary OWL format was corrupt.
+     * @throws UnloadableImportException If an import could not be loaded.
+     * @throws E A custom exception type.
+     */
     public <E extends Throwable> void read(InputStream inputStream, BinaryOWLOntologyDocumentHandler<E> handler, OWLDataFactory df) throws IOException, BinaryOWLParseException, UnloadableImportException, E {
+        checkNotNull(inputStream);
+        checkNotNull(handler);
+        checkNotNull(df);
 
         DataInputStream dis = BinaryOWLStreamUtil.getDataInputStream(inputStream);
         BinaryOWLOntologyDocumentPreamble preamble = new BinaryOWLOntologyDocumentPreamble(dis);
@@ -74,19 +91,36 @@ public class BinaryOWLOntologyDocumentSerializer extends SerializerBase {
     }
 
 
-
-    public void write(OWLOntologyDocument ontology, DataOutputStream dos) throws IOException {
-        write(ontology, dos, new BinaryOWLMetadata());
+    /**
+     * Writes out an {@link OWLOntologyDocument} in binary OWL.
+     * @param document The document to be written out. Not {@code null}.
+     * @param dos The output stream to write the document to.  Not {@code null}.
+     * @throws IOException If there was a problem writing to the stream.
+     * @throws NullPointerException if any parameters are {@code null}.
+     */
+    public void write(OWLOntologyDocument document, DataOutputStream dos) throws IOException {
+        write(document, dos, new BinaryOWLMetadata());
     }
 
-    public void write(OWLOntologyDocument ontology, DataOutputStream dos, BinaryOWLMetadata documentMetadata) throws IOException {
+    /**
+     * Writes out an {@link OWLOntologyDocument} in binary OWL.
+     * @param document The document to be written out. Not {@code null}.
+     * @param dos The output stream to write the document to.  Not {@code null}.
+     * @param documentMetadata Document metadata.  Not {@code null}.
+     * @throws IOException If there was a problem writing to the stream.
+     * @throws NullPointerException if any parameters are {@code null}.
+     */
+    public void write(OWLOntologyDocument document, DataOutputStream dos, BinaryOWLMetadata documentMetadata) throws IOException {
+        checkNotNull(document);
+        checkNotNull(dos);
+        checkNotNull(documentMetadata);
+
         BinaryOWLOntologyDocumentPreamble preamble = new BinaryOWLOntologyDocumentPreamble();
         preamble.write(dos);
-
         BinaryOWLDocumentBodySerializerSelector selector = new BinaryOWLDocumentBodySerializerSelector();
         BinaryOWLVersion fileFormatVersion = preamble.getFileFormatVersion();
         BinaryOWLDocumentBodySerializer serializer = selector.getSerializerForVersion(fileFormatVersion);
-        serializer.write(ontology, dos, documentMetadata);
+        serializer.write(document, dos, documentMetadata);
     }
 
 
