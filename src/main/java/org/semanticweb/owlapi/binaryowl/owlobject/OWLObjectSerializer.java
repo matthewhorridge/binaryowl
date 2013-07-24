@@ -53,6 +53,10 @@ import java.io.*;
  * Stanford University<br>
  * Bio-Medical Informatics Research Group<br>
  * Date: 25/04/2012
+ * <p>
+ *     An inteface to an object that can read and write the binary OWL representation of OWLObjects.  All subclasses
+ *     of this class are thread safe.
+ * </p>
  */
 public abstract class OWLObjectSerializer<C extends OWLObject> extends SerializerBase {
 

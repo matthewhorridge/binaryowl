@@ -39,14 +39,11 @@
 
 package org.semanticweb.owlapi.binaryowl;
 
-import org.semanticweb.owlapi.binaryowl.lookup.LookupTable;
 import org.semanticweb.owlapi.binaryowl.owlobject.*;
 import org.semanticweb.owlapi.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.owlapi.binaryowl.stream.BinaryOWLOutputStream;
 import org.semanticweb.owlapi.model.*;
 
-import java.io.DataInput;
-import java.io.DataOutput;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -56,6 +53,10 @@ import java.util.*;
  * Stanford University<br>
  * Bio-Medical Informatics Research Group<br>
  * Date: 06/04/2012
+ * <p>
+ *     Maps {@link OWLObject}s to their binary type markers and vice-versa.  Binds together serializers for objects
+ *     with type markers.
+ * </p>
  */
 public class OWLObjectBinaryType<C extends OWLObject> {
 
@@ -293,8 +294,6 @@ public class OWLObjectBinaryType<C extends OWLObject> {
     }
 
 
-    private static Map<String, OWLObjectBinaryType> simpleClassName2TypeMap = new HashMap<String, OWLObjectBinaryType>();
-
 
     private static OWLObjectBinaryTypeSelector selector = new OWLObjectBinaryTypeSelector();
 
@@ -322,34 +321,14 @@ public class OWLObjectBinaryType<C extends OWLObject> {
     public OWLObjectSerializer<C> getSerializer() {
         return serializer;
     }
-    
-    public static <C extends OWLObject> C read(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
-        byte typeMarker = inputStream.readByte();
-        if(typeMarker <= 0) {
-            throw new BinaryOWLParseException("Invalid type marker: " + typeMarker);
-        }
-        if(typeMarker >= 85) {
-            throw new BinaryOWLParseException("Invalid type marker: " + typeMarker);
-        }
-        OWLObjectBinaryType<C> type = getType(typeMarker);
-        return type.getSerializer().read(inputStream);
-    }
-
-
-    public static void write(OWLObject object, BinaryOWLOutputStream outputStream) throws IOException {
-        OWLObjectBinaryType<OWLObject> type = OWLObjectBinaryType.<OWLObject>getType(object);
-        outputStream.writeByte(type.getMarker());
-        final OWLObjectSerializer<OWLObject> serializer = type.getSerializer();
-        serializer.write(object, outputStream);
-    }
 
     @SuppressWarnings("unchecked")
-    public static <C extends OWLObject>  OWLObjectBinaryType<C> getType(C object) {
+    private static <C extends OWLObject>  OWLObjectBinaryType<C> getType(C object) {
         return (OWLObjectBinaryType<C>) object.accept(selector);
     }
 
     @SuppressWarnings("unchecked")
-    public static <T extends OWLObject> OWLObjectBinaryType<T> getType(byte typeMarker) {
+    private static <T extends OWLObject> OWLObjectBinaryType<T> getType(byte typeMarker) {
         return (OWLObjectBinaryType<T>) values.get(typeMarker - 1);
     }
 
@@ -387,11 +366,52 @@ public class OWLObjectBinaryType<C extends OWLObject> {
         }
     }
 
-    static {
-        for(OWLObjectBinaryType type : values()) {
-            simpleClassName2TypeMap.put(type.getOWLObjectClass().getSimpleName(), type);
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////
+    ////////  Serialization methods
+    ////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+    /**
+     * Reads an OWLObject from a {@link BinaryOWLInputStream}.  This method is thread safe.
+     * @param inputStream The input stream.  Not {@code null}.
+     * @param <C> The type of object to be read.
+     * @return The object that was read.  Not {@code null}.
+     * @throws IOException if there was a problem reading the object.
+     * @throws BinaryOWLParseException If the binary representation of the object is corrupt.
+     */
+    public static <C extends OWLObject> C read(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
+        byte typeMarker = inputStream.readByte();
+        if(typeMarker <= 0) {
+            throw new BinaryOWLParseException("Invalid type marker: " + typeMarker);
         }
+        if(typeMarker >= 85) {
+            throw new BinaryOWLParseException("Invalid type marker: " + typeMarker);
+        }
+        OWLObjectBinaryType<C> type = getType(typeMarker);
+        return type.getSerializer().read(inputStream);
     }
+
+    /**
+     * Writes an {@link OWLObject} to a {@link BinaryOWLOutputStream}.
+     * @param object The object to be written.  Not {@code null}.
+     * @param outputStream The output stream to write the object to. Not {@code null}.
+     * @throws IOException If there was a problem writing to the output stream.
+     */
+    public static void write(OWLObject object, BinaryOWLOutputStream outputStream) throws IOException {
+        OWLObjectBinaryType<OWLObject> type = OWLObjectBinaryType.<OWLObject>getType(object);
+        outputStream.writeByte(type.getMarker());
+        final OWLObjectSerializer<OWLObject> serializer = type.getSerializer();
+        serializer.write(object, outputStream);
+    }
+
 
 }
 
