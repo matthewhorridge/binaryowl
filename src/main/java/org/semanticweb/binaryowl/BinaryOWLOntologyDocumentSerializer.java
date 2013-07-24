@@ -98,23 +98,24 @@ public class BinaryOWLOntologyDocumentSerializer extends SerializerBase {
      * @throws IOException If there was a problem writing to the stream.
      * @throws NullPointerException if any parameters are {@code null}.
      */
-    public void write(OWLOntologyDocument document, DataOutputStream dos) throws IOException {
+    public void write(OWLOntologyDocument document, OutputStream dos) throws IOException {
         write(document, dos, new BinaryOWLMetadata());
     }
 
     /**
      * Writes out an {@link OWLOntologyDocument} in binary OWL.
      * @param document The document to be written out. Not {@code null}.
-     * @param dos The output stream to write the document to.  Not {@code null}.
+     * @param os The output stream to write the document to.  Not {@code null}.
      * @param documentMetadata Document metadata.  Not {@code null}.
      * @throws IOException If there was a problem writing to the stream.
      * @throws NullPointerException if any parameters are {@code null}.
      */
-    public void write(OWLOntologyDocument document, DataOutputStream dos, BinaryOWLMetadata documentMetadata) throws IOException {
+    public void write(OWLOntologyDocument document, OutputStream os, BinaryOWLMetadata documentMetadata) throws IOException {
         checkNotNull(document);
-        checkNotNull(dos);
+        checkNotNull(os);
         checkNotNull(documentMetadata);
 
+        DataOutputStream dos = new DataOutputStream(os);
         BinaryOWLOntologyDocumentPreamble preamble = new BinaryOWLOntologyDocumentPreamble();
         preamble.write(dos);
         BinaryOWLDocumentBodySerializerSelector selector = new BinaryOWLDocumentBodySerializerSelector();
