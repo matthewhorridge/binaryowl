@@ -40,6 +40,7 @@
 package org.semanticweb.binaryowl;
 
 import org.semanticweb.binaryowl.change.OntologyChangeDataList;
+import org.semanticweb.binaryowl.doc.OWLOntologyDocument;
 import org.semanticweb.binaryowl.owlobject.SerializerBase;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLStreamUtil;
@@ -63,7 +64,7 @@ public class BinaryOWLOntologyDocumentSerializer extends SerializerBase {
     public static final byte CHUNK_FOLLOWS_MARKER = 33;
 
     /**
-     * Reads an {@link OWLOntologyDocument} that is stored in binary OWL.
+     * Reads an {@link org.semanticweb.binaryowl.doc.OWLOntologyDocument} that is stored in binary OWL.
      * @param inputStream The input stream to read the document from.  Not {@code null}.
      * @param handler The handler that handels document elements as they are read.  Not {@code null}.
      * @param df An {@link OWLDataFactory} that can be used to instantiate {@link org.semanticweb.owlapi.model.OWLObject}s.  Not {@code null}.
@@ -92,7 +93,7 @@ public class BinaryOWLOntologyDocumentSerializer extends SerializerBase {
 
 
     /**
-     * Writes out an {@link OWLOntologyDocument} in binary OWL.
+     * Writes out an {@link org.semanticweb.binaryowl.doc.OWLOntologyDocument} in binary OWL.
      * @param document The document to be written out. Not {@code null}.
      * @param dos The output stream to write the document to.  Not {@code null}.
      * @throws IOException If there was a problem writing to the stream.

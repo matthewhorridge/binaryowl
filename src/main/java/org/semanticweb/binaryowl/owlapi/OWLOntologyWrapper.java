@@ -1,6 +1,6 @@
 package org.semanticweb.binaryowl.owlapi;
 
-import org.semanticweb.binaryowl.OWLOntologyDocument;
+import org.semanticweb.binaryowl.doc.OWLOntologyDocument;
 import org.semanticweb.owlapi.model.*;
 
 import java.util.Set;

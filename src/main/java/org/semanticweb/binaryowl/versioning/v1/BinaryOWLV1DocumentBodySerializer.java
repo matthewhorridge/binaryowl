@@ -3,6 +3,7 @@ package org.semanticweb.binaryowl.versioning.v1;
 import org.semanticweb.binaryowl.*;
 import org.semanticweb.binaryowl.change.OntologyChangeDataList;
 import org.semanticweb.binaryowl.chunk.BinaryOWLMetadataChunk;
+import org.semanticweb.binaryowl.doc.OWLOntologyDocument;
 import org.semanticweb.binaryowl.lookup.IRILookupTable;
 import org.semanticweb.binaryowl.lookup.LiteralLookupTable;
 import org.semanticweb.binaryowl.lookup.LookupTable;

@@ -1,4 +1,4 @@
-package org.semanticweb.binaryowl;
+package org.semanticweb.binaryowl.doc;
 
 import org.semanticweb.owlapi.model.*;
 

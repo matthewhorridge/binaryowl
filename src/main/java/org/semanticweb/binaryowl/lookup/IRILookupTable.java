@@ -39,7 +39,7 @@
 
 package org.semanticweb.binaryowl.lookup;
 
-import org.semanticweb.binaryowl.OWLOntologyDocument;
+import org.semanticweb.binaryowl.doc.OWLOntologyDocument;
 import org.semanticweb.owlapi.model.*;
 import uk.ac.manchester.cs.owl.owlapi.*;
 

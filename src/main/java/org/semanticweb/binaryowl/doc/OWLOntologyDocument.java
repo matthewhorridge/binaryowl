@@ -1,4 +1,4 @@
-package org.semanticweb.binaryowl;
+package org.semanticweb.binaryowl.doc;
 
 /**
  * Author: Matthew Horridge<br>

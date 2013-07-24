@@ -3,7 +3,7 @@ package org.semanticweb.binaryowl.versioning;
 import org.semanticweb.binaryowl.BinaryOWLMetadata;
 import org.semanticweb.binaryowl.BinaryOWLOntologyDocumentHandler;
 import org.semanticweb.binaryowl.BinaryOWLParseException;
-import org.semanticweb.binaryowl.OWLOntologyDocument;
+import org.semanticweb.binaryowl.doc.OWLOntologyDocument;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.UnloadableImportException;
 
