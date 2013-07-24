@@ -1,6 +1,5 @@
 package org.semanticweb.owlapi.binaryowl.versioning;
 
-import org.semanticweb.owlapi.binaryowl.BinaryOWLDocumentBodySerializer;
 import org.semanticweb.owlapi.binaryowl.BinaryOWLVersion;
 import org.semanticweb.owlapi.binaryowl.versioning.v1.BinaryOWLV1DocumentBodySerializer;
 

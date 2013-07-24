@@ -10,6 +10,7 @@ import org.semanticweb.owlapi.binaryowl.owlobject.BinaryOWLImportsDeclarationSet
 import org.semanticweb.owlapi.binaryowl.owlobject.BinaryOWLOntologyID;
 import org.semanticweb.owlapi.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.owlapi.binaryowl.stream.BinaryOWLOutputStream;
+import org.semanticweb.owlapi.binaryowl.versioning.BinaryOWLDocumentBodySerializer;
 import org.semanticweb.owlapi.model.*;
 
 import java.io.DataInputStream;
@@ -87,7 +88,7 @@ public class BinaryOWLV1DocumentBodySerializer implements BinaryOWLDocumentBodyS
         return new BinaryOWLOntologyDocumentFormat(metadata);
     }
 
-    public void readOntologyChanges(BinaryOWLInputStream inputStream, BinaryOWLOntologyDocumentAppendedChangeHandler changeHandler) throws IOException, BinaryOWLParseException {
+    private void readOntologyChanges(BinaryOWLInputStream inputStream, BinaryOWLOntologyDocumentAppendedChangeHandler changeHandler) throws IOException, BinaryOWLParseException {
         byte chunkFollowsMarker = (byte) inputStream.read();
         while (chunkFollowsMarker != -1) {
             OntologyChangeDataList list = new OntologyChangeDataList(inputStream);
@@ -137,10 +138,6 @@ public class BinaryOWLV1DocumentBodySerializer implements BinaryOWLDocumentBodyS
         }
 
         dos.flush();
-    }
-
-    public void write(OWLOntology ontology, DataOutputStream dos) throws IOException {
-        write(ontology, dos, new BinaryOWLMetadata());
     }
 
 }

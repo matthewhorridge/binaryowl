@@ -41,11 +41,10 @@ package org.semanticweb.owlapi.binaryowl;
 
 import org.semanticweb.owlapi.binaryowl.change.OntologyChangeDataList;
 import org.semanticweb.owlapi.binaryowl.owlobject.SerializerBase;
-import org.semanticweb.owlapi.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.owlapi.binaryowl.stream.BinaryOWLOutputStream;
 import org.semanticweb.owlapi.binaryowl.stream.BinaryOWLStreamUtil;
+import org.semanticweb.owlapi.binaryowl.versioning.BinaryOWLDocumentBodySerializer;
 import org.semanticweb.owlapi.binaryowl.versioning.BinaryOWLDocumentBodySerializerSelector;
-import org.semanticweb.owlapi.binaryowl.versioning.v1.BinaryOWLV1DocumentBodySerializer;
 import org.semanticweb.owlapi.model.*;
 
 import java.io.*;
@@ -91,24 +90,10 @@ public class BinaryOWLOntologyDocumentSerializer extends SerializerBase {
     }
 
 
-
-
-    public void readOntologyChanges(BinaryOWLInputStream inputStream, BinaryOWLOntologyDocumentAppendedChangeHandler changeHandler) throws IOException, BinaryOWLParseException {
-        byte chunkFollowsMarker = (byte) inputStream.read();
-        while (chunkFollowsMarker != -1) {
-            OntologyChangeDataList list = new OntologyChangeDataList(inputStream);
-            changeHandler.handleChanges(list);
-            chunkFollowsMarker = (byte) inputStream.read();
-        }
-    }
-
-
     public void appendOntologyChanges(BinaryOWLOutputStream dos, OntologyChangeDataList changeRecords) throws IOException {
         dos.writeByte(BinaryOWLOntologyDocumentSerializer.CHUNK_FOLLOWS_MARKER);
         changeRecords.write(dos);
     }
-
-
 
     public void appendOntologyChanges(File file, OntologyChangeDataList changeRecords) throws IOException {
         FileOutputStream fos = new FileOutputStream(file, true);

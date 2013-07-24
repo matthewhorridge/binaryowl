@@ -1,5 +1,9 @@
-package org.semanticweb.owlapi.binaryowl;
+package org.semanticweb.owlapi.binaryowl.versioning;
 
+import org.semanticweb.owlapi.binaryowl.BinaryOWLMetadata;
+import org.semanticweb.owlapi.binaryowl.BinaryOWLOntologyDocumentFormat;
+import org.semanticweb.owlapi.binaryowl.BinaryOWLOntologyDocumentHandler;
+import org.semanticweb.owlapi.binaryowl.BinaryOWLParseException;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.UnloadableImportException;
