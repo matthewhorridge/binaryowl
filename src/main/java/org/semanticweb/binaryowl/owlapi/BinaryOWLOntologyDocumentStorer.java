@@ -40,6 +40,7 @@
 package org.semanticweb.binaryowl.owlapi;
 
 import org.semanticweb.binaryowl.BinaryOWLOntologyDocumentSerializer;
+import org.semanticweb.binaryowl.OWLOntologyDocument;
 import org.semanticweb.binaryowl.owlapi.BinaryOWLOntologyDocumentFormat;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentTarget;
 import org.semanticweb.owlapi.model.*;
@@ -90,6 +91,7 @@ public class BinaryOWLOntologyDocumentStorer implements OWLOntologyStorer{
     private void storeOntology(OWLOntology ontology, OutputStream os) throws OWLOntologyStorageException, IOException {
         DataOutputStream dos = new DataOutputStream(os);
         BinaryOWLOntologyDocumentSerializer serializer = new BinaryOWLOntologyDocumentSerializer();
-        serializer.write(ontology, dos);
+        final OWLOntologyDocument doc = new OWLOntologyWrapper(ontology);
+        serializer.write(doc, dos);
     }
 }

@@ -75,11 +75,11 @@ public class BinaryOWLOntologyDocumentSerializer extends SerializerBase {
 
 
 
-    public void write(OWLOntology ontology, DataOutputStream dos) throws IOException {
+    public void write(OWLOntologyDocument ontology, DataOutputStream dos) throws IOException {
         write(ontology, dos, new BinaryOWLMetadata());
     }
 
-    public void write(OWLOntology ontology, DataOutputStream dos, BinaryOWLMetadata documentMetadata) throws IOException {
+    public void write(OWLOntologyDocument ontology, DataOutputStream dos, BinaryOWLMetadata documentMetadata) throws IOException {
         BinaryOWLOntologyDocumentPreamble preamble = new BinaryOWLOntologyDocumentPreamble();
         preamble.write(dos);
 

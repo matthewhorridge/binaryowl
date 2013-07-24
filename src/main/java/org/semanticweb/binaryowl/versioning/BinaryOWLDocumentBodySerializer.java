@@ -1,6 +1,7 @@
 package org.semanticweb.binaryowl.versioning;
 
 import org.semanticweb.binaryowl.BinaryOWLMetadata;
+import org.semanticweb.binaryowl.OWLOntologyDocument;
 import org.semanticweb.binaryowl.owlapi.BinaryOWLOntologyDocumentFormat;
 import org.semanticweb.binaryowl.BinaryOWLOntologyDocumentHandler;
 import org.semanticweb.binaryowl.BinaryOWLParseException;
@@ -26,6 +27,6 @@ public interface BinaryOWLDocumentBodySerializer {
 
     <T extends Throwable> void read(DataInputStream dis, BinaryOWLOntologyDocumentHandler<T> handler, OWLDataFactory dataFactory) throws IOException, BinaryOWLParseException, UnloadableImportException, T;
 
-    void write(OWLOntology ontology, DataOutputStream dos, BinaryOWLMetadata documentMetadata) throws IOException;
+    void write(OWLOntologyDocument ontology, DataOutputStream dos, BinaryOWLMetadata documentMetadata) throws IOException;
 
 }

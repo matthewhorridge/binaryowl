@@ -100,7 +100,7 @@ public class BinaryOWLV1DocumentBodySerializer implements BinaryOWLDocumentBodyS
 
 
 
-    public void write(OWLOntology ontology, DataOutputStream dos, BinaryOWLMetadata documentMetadata) throws IOException {
+    public void write(OWLOntologyDocument doc, DataOutputStream dos, BinaryOWLMetadata documentMetadata) throws IOException {
 
         BinaryOWLOutputStream nonLookupTableOutputStream = new BinaryOWLOutputStream(dos, VERSION);
 
@@ -109,19 +109,19 @@ public class BinaryOWLV1DocumentBodySerializer implements BinaryOWLDocumentBodyS
         metadataChunk.write(nonLookupTableOutputStream);
 
         // Ontology ID
-        BinaryOWLOntologyID serializer = new BinaryOWLOntologyID(ontology.getOntologyID());
+        BinaryOWLOntologyID serializer = new BinaryOWLOntologyID(doc.getOntologyID());
         serializer.write(nonLookupTableOutputStream);
 
         // Imports
-        BinaryOWLImportsDeclarationSet importsDeclarationSet = new BinaryOWLImportsDeclarationSet(ontology.getImportsDeclarations());
+        BinaryOWLImportsDeclarationSet importsDeclarationSet = new BinaryOWLImportsDeclarationSet(doc.getImportsDeclarations());
         importsDeclarationSet.write(nonLookupTableOutputStream);
 
         // IRI Table
-        IRILookupTable iriLookupTable = new IRILookupTable(ontology);
+        IRILookupTable iriLookupTable = new IRILookupTable(doc);
         iriLookupTable.write(dos);
 
         // Literal Table
-        LiteralLookupTable literalLookupTable = new LiteralLookupTable(ontology, iriLookupTable);
+        LiteralLookupTable literalLookupTable = new LiteralLookupTable(doc, iriLookupTable);
         literalLookupTable.write(dos);
 
         LookupTable lookupTable = new LookupTable(iriLookupTable);
@@ -129,11 +129,11 @@ public class BinaryOWLV1DocumentBodySerializer implements BinaryOWLDocumentBodyS
         BinaryOWLOutputStream lookupTableOutputStream = new BinaryOWLOutputStream(dos, lookupTable);
 
         // Ontology Annotations
-        lookupTableOutputStream.writeOWLObjects(ontology.getAnnotations());
+        lookupTableOutputStream.writeOWLObjects(doc.getAnnotations());
 
         // Axiom tables - axioms by type
         for (AxiomType<?> axiomType : AxiomType.AXIOM_TYPES) {
-            Set<? extends OWLAxiom> axioms = ontology.getAxioms(axiomType);
+            Set<? extends OWLAxiom> axioms = doc.getAxioms(axiomType);
             lookupTableOutputStream.writeOWLObjects(axioms);
         }
 

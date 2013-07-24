@@ -1,6 +1,7 @@
 package org.semanticweb.binaryowl.tests;
 
 import org.junit.Test;
+import org.semanticweb.binaryowl.owlapi.OWLOntologyWrapper;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.binaryowl.owlapi.BinaryOWLOntologyBuildingHandler;
 import org.semanticweb.binaryowl.BinaryOWLOntologyDocumentSerializer;
@@ -30,7 +31,7 @@ public class AllConstructsRoundTripTestCase {
         OWLOntology ont = manager.loadOntologyFromOntologyDocument(IRI.create(url));
         BinaryOWLOntologyDocumentSerializer serializer = new BinaryOWLOntologyDocumentSerializer();
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        serializer.write(ont, new DataOutputStream(outputStream));
+        serializer.write(new OWLOntologyWrapper(ont), new DataOutputStream(outputStream));
 
         OWLOntologyManager manIn = OWLManager.createOWLOntologyManager();
         OWLOntology ontIn = manIn.createOntology();

@@ -39,6 +39,7 @@
 
 package org.semanticweb.binaryowl.lookup;
 
+import org.semanticweb.binaryowl.OWLOntologyDocument;
 import org.semanticweb.owlapi.model.*;
 import uk.ac.manchester.cs.owl.owlapi.*;
 
@@ -74,7 +75,7 @@ public class IRILookupTable {
     private OWLDatatype datatypeTable [];
 
     
-    public IRILookupTable(OWLOntology ontology) {
+    public IRILookupTable(OWLOntologyDocument ontology) {
         processSignatureSubset(ontology.getClassesInSignature());
         processSignatureSubset(ontology.getObjectPropertiesInSignature());
         processSignatureSubset(ontology.getDataPropertiesInSignature());

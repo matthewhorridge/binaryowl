@@ -39,6 +39,7 @@
 
 package org.semanticweb.binaryowl.lookup;
 
+import org.semanticweb.binaryowl.OWLOntologyDocument;
 import org.semanticweb.owlapi.model.*;
 import org.semanticweb.owlapi.vocab.OWL2Datatype;
 import uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl;
@@ -99,14 +100,14 @@ public class LiteralLookupTable {
 
 
 
-    public LiteralLookupTable(OWLOntology ontology, IRILookupTable lookupTable) {
+    public LiteralLookupTable(OWLOntologyDocument ontology, IRILookupTable lookupTable) {
         this.iriLookupTable = lookupTable;
         if (useInterning) {
             internLiterals(ontology);
         }
     }
 
-    private void internLiterals(OWLOntology ontology) {
+    private void internLiterals(OWLOntologyDocument ontology) {
         for (OWLAnnotationAssertionAxiom ax : ontology.getAxioms(AxiomType.ANNOTATION_ASSERTION)) {
             OWLAnnotationValue value = ax.getValue();
             if (value instanceof OWLLiteral) {
