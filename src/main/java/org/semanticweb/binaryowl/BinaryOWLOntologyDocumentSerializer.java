@@ -44,8 +44,8 @@ import org.semanticweb.binaryowl.doc.OWLOntologyDocument;
 import org.semanticweb.binaryowl.owlobject.serializer.SerializerBase;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLStreamUtil;
-import org.semanticweb.binaryowl.versioning.BinaryOWLDocumentBodySerializer;
-import org.semanticweb.binaryowl.versioning.BinaryOWLDocumentBodySerializerSelector;
+import org.semanticweb.binaryowl.serializer.BinaryOWLDocumentBodySerializer;
+import org.semanticweb.binaryowl.serializer.BinaryOWLDocumentBodySerializerSelector;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.UnloadableImportException;
 

@@ -1,4 +1,4 @@
-package org.semanticweb.binaryowl.versioning;
+package org.semanticweb.binaryowl.serializer;
 
 import org.semanticweb.binaryowl.BinaryOWLMetadata;
 import org.semanticweb.binaryowl.BinaryOWLOntologyDocumentHandler;

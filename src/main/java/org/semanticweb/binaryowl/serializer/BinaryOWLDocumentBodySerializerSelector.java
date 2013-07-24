@@ -1,7 +1,7 @@
-package org.semanticweb.binaryowl.versioning;
+package org.semanticweb.binaryowl.serializer;
 
 import org.semanticweb.binaryowl.BinaryOWLVersion;
-import org.semanticweb.binaryowl.versioning.v1.BinaryOWLV1DocumentBodySerializer;
+import org.semanticweb.binaryowl.serializer.v1.BinaryOWLV1DocumentBodySerializer;
 
 /**
  * Author: Matthew Horridge<br>

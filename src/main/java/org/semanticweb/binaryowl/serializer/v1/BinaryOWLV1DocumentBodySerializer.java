@@ -1,4 +1,4 @@
-package org.semanticweb.binaryowl.versioning.v1;
+package org.semanticweb.binaryowl.serializer.v1;
 
 import org.semanticweb.binaryowl.*;
 import org.semanticweb.binaryowl.change.OntologyChangeDataList;
@@ -11,7 +11,7 @@ import org.semanticweb.binaryowl.owlobject.serializer.BinaryOWLImportsDeclaratio
 import org.semanticweb.binaryowl.owlobject.serializer.BinaryOWLOntologyID;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
-import org.semanticweb.binaryowl.versioning.BinaryOWLDocumentBodySerializer;
+import org.semanticweb.binaryowl.serializer.BinaryOWLDocumentBodySerializer;
 import org.semanticweb.owlapi.model.*;
 
 import java.io.DataInputStream;
