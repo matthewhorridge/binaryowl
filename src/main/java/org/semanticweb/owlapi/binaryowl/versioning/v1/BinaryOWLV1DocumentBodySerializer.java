@@ -1,4 +1,4 @@
-package org.semanticweb.owlapi.binaryowl.v1;
+package org.semanticweb.owlapi.binaryowl.versioning.v1;
 
 import org.semanticweb.owlapi.binaryowl.*;
 import org.semanticweb.owlapi.binaryowl.change.OntologyChangeDataList;

@@ -40,22 +40,15 @@
 package org.semanticweb.owlapi.binaryowl;
 
 import org.semanticweb.owlapi.binaryowl.change.OntologyChangeDataList;
-import org.semanticweb.owlapi.binaryowl.chunk.BinaryOWLMetadataChunk;
-import org.semanticweb.owlapi.binaryowl.chunk.ChunkUtil;
-import org.semanticweb.owlapi.binaryowl.lookup.IRILookupTable;
-import org.semanticweb.owlapi.binaryowl.lookup.LiteralLookupTable;
-import org.semanticweb.owlapi.binaryowl.lookup.LookupTable;
-import org.semanticweb.owlapi.binaryowl.owlobject.BinaryOWLImportsDeclarationSet;
-import org.semanticweb.owlapi.binaryowl.owlobject.BinaryOWLOntologyID;
 import org.semanticweb.owlapi.binaryowl.owlobject.SerializerBase;
 import org.semanticweb.owlapi.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.owlapi.binaryowl.stream.BinaryOWLOutputStream;
 import org.semanticweb.owlapi.binaryowl.stream.BinaryOWLStreamUtil;
-import org.semanticweb.owlapi.binaryowl.v1.BinaryOWLV1DocumentBodySerializer;
+import org.semanticweb.owlapi.binaryowl.versioning.BinaryOWLDocumentBodySerializerSelector;
+import org.semanticweb.owlapi.binaryowl.versioning.v1.BinaryOWLV1DocumentBodySerializer;
 import org.semanticweb.owlapi.model.*;
 
 import java.io.*;
-import java.util.*;
 
 /**
  * Author: Matthew Horridge<br>
@@ -67,20 +60,17 @@ public class BinaryOWLOntologyDocumentSerializer extends SerializerBase {
 
     public static final byte CHUNK_FOLLOWS_MARKER = 33;
 
-    private static final BinaryOWLVersion EXPECTED_VERSION = BinaryOWLVersion.getVersion(1);
-
-
     public <E extends Throwable> BinaryOWLOntologyDocumentFormat read(InputStream inputStream, BinaryOWLOntologyDocumentHandler<E> handler, OWLDataFactory df) throws IOException, BinaryOWLParseException, UnloadableImportException, E {
 
         DataInputStream dis = BinaryOWLStreamUtil.getDataInputStream(inputStream);
         BinaryOWLOntologyDocumentPreamble preamble = new BinaryOWLOntologyDocumentPreamble(dis);
         BinaryOWLVersion fileFormatVersion = preamble.getFileFormatVersion();
-        if (!fileFormatVersion.equals(EXPECTED_VERSION)) {
-            throw new BinaryOWLParseException("Cannot parse file format version: " + fileFormatVersion + " (expected version: " + EXPECTED_VERSION + ")");
-        }
+
         handler.handleBeginDocument();
         handler.handlePreamble(preamble);
-        BinaryOWLDocumentBodySerializer serializer = new BinaryOWLV1DocumentBodySerializer();
+
+        BinaryOWLDocumentBodySerializerSelector selector = new BinaryOWLDocumentBodySerializerSelector();
+        BinaryOWLDocumentBodySerializer serializer = selector.getSerializerForVersion(fileFormatVersion);
         return serializer.read(dis, handler, df);
     }
 
@@ -93,7 +83,10 @@ public class BinaryOWLOntologyDocumentSerializer extends SerializerBase {
     public void write(OWLOntology ontology, DataOutputStream dos, BinaryOWLMetadata documentMetadata) throws IOException {
         BinaryOWLOntologyDocumentPreamble preamble = new BinaryOWLOntologyDocumentPreamble();
         preamble.write(dos);
-        BinaryOWLDocumentBodySerializer serializer = new BinaryOWLV1DocumentBodySerializer();
+
+        BinaryOWLDocumentBodySerializerSelector selector = new BinaryOWLDocumentBodySerializerSelector();
+        BinaryOWLVersion fileFormatVersion = preamble.getFileFormatVersion();
+        BinaryOWLDocumentBodySerializer serializer = selector.getSerializerForVersion(fileFormatVersion);
         serializer.write(ontology, dos, documentMetadata);
     }
 
@@ -122,6 +115,10 @@ public class BinaryOWLOntologyDocumentSerializer extends SerializerBase {
         appendOntologyChanges(new BinaryOWLOutputStream(fos, BinaryOWLVersion.getVersion(1)), changeRecords);
         fos.close();
     }
+
+
+
+
 
 
 
