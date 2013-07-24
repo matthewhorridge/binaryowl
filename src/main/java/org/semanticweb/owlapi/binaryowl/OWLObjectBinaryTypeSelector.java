@@ -349,19 +349,19 @@ public class OWLObjectBinaryTypeSelector implements OWLObjectVisitorEx<OWLObject
     }
 
     public OWLObjectBinaryType<SWRLClassAtom> visit(SWRLClassAtom node) {
-        return OWLObjectBinaryType.SWRL_CLASS_ATOM;
+        return SWRL_CLASS_ATOM;
     }
 
     public OWLObjectBinaryType<SWRLDataRangeAtom> visit(SWRLDataRangeAtom node) {
-        return OWLObjectBinaryType.SWRL_DATA_RANGE_ATOM;
+        return SWRL_DATA_RANGE_ATOM;
     }
 
     public OWLObjectBinaryType<SWRLObjectPropertyAtom> visit(SWRLObjectPropertyAtom node) {
-        return OWLObjectBinaryType.SWRL_OBJECT_PROPERTY_ATOM;
+        return SWRL_OBJECT_PROPERTY_ATOM;
     }
 
     public OWLObjectBinaryType<SWRLDataPropertyAtom> visit(SWRLDataPropertyAtom node) {
-        return OWLObjectBinaryType.SWRL_DATA_PROPERTY_ATOM;
+        return SWRL_DATA_PROPERTY_ATOM;
     }
 
     public OWLObjectBinaryType<SWRLBuiltInAtom> visit(SWRLBuiltInAtom node) {
@@ -373,7 +373,7 @@ public class OWLObjectBinaryTypeSelector implements OWLObjectVisitorEx<OWLObject
     }
 
     public OWLObjectBinaryType<SWRLIndividualArgument> visit(SWRLIndividualArgument node) {
-        return OWLObjectBinaryType.SWRL_INDIVIDUAL_ARGUMENT;
+        return SWRL_INDIVIDUAL_ARGUMENT;
     }
 
     public OWLObjectBinaryType<SWRLLiteralArgument> visit(SWRLLiteralArgument node) {
