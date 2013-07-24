@@ -59,7 +59,7 @@ public class BinaryOWLOntologyDocumentSerializer extends SerializerBase {
 
     public static final byte CHUNK_FOLLOWS_MARKER = 33;
 
-    public <E extends Throwable> BinaryOWLOntologyDocumentFormat read(InputStream inputStream, BinaryOWLOntologyDocumentHandler<E> handler, OWLDataFactory df) throws IOException, BinaryOWLParseException, UnloadableImportException, E {
+    public <E extends Throwable> void read(InputStream inputStream, BinaryOWLOntologyDocumentHandler<E> handler, OWLDataFactory df) throws IOException, BinaryOWLParseException, UnloadableImportException, E {
 
         DataInputStream dis = BinaryOWLStreamUtil.getDataInputStream(inputStream);
         BinaryOWLOntologyDocumentPreamble preamble = new BinaryOWLOntologyDocumentPreamble(dis);
@@ -70,7 +70,7 @@ public class BinaryOWLOntologyDocumentSerializer extends SerializerBase {
 
         BinaryOWLDocumentBodySerializerSelector selector = new BinaryOWLDocumentBodySerializerSelector();
         BinaryOWLDocumentBodySerializer serializer = selector.getSerializerForVersion(fileFormatVersion);
-        return serializer.read(dis, handler, df);
+        serializer.read(dis, handler, df);
     }
 
 

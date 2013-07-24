@@ -2,7 +2,7 @@ package org.semanticweb.binaryowl.tests;
 
 import org.junit.Test;
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.binaryowl.BinaryOWLOntologyBuildingHandler;
+import org.semanticweb.binaryowl.owlapi.BinaryOWLOntologyBuildingHandler;
 import org.semanticweb.binaryowl.BinaryOWLOntologyDocumentSerializer;
 import org.semanticweb.binaryowl.BinaryOWLParseException;
 import org.semanticweb.owlapi.model.*;

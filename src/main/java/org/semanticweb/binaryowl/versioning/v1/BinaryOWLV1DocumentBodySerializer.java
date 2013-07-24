@@ -6,6 +6,7 @@ import org.semanticweb.binaryowl.chunk.BinaryOWLMetadataChunk;
 import org.semanticweb.binaryowl.lookup.IRILookupTable;
 import org.semanticweb.binaryowl.lookup.LiteralLookupTable;
 import org.semanticweb.binaryowl.lookup.LookupTable;
+import org.semanticweb.binaryowl.owlapi.BinaryOWLOntologyDocumentFormat;
 import org.semanticweb.binaryowl.owlobject.BinaryOWLImportsDeclarationSet;
 import org.semanticweb.binaryowl.owlobject.BinaryOWLOntologyID;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
@@ -34,7 +35,7 @@ public class BinaryOWLV1DocumentBodySerializer implements BinaryOWLDocumentBodyS
      */
     private static final BinaryOWLVersion VERSION = BinaryOWLVersion.getVersion(1);
 
-    public <E extends Throwable> BinaryOWLOntologyDocumentFormat read(DataInputStream dis, BinaryOWLOntologyDocumentHandler<E> handler, OWLDataFactory df) throws IOException, BinaryOWLParseException, UnloadableImportException, E {
+    public <E extends Throwable> void read(DataInputStream dis, BinaryOWLOntologyDocumentHandler<E> handler, OWLDataFactory df) throws IOException, BinaryOWLParseException, UnloadableImportException, E {
 
         BinaryOWLInputStream inputStream = new BinaryOWLInputStream(dis, df, VERSION);
 
@@ -85,7 +86,6 @@ public class BinaryOWLV1DocumentBodySerializer implements BinaryOWLDocumentBodyS
         readOntologyChanges(changesInputStream, handler);
         handler.handleEndDocumentChangesBlock();
         handler.handleEndDocument();
-        return new BinaryOWLOntologyDocumentFormat(metadata);
     }
 
     private void readOntologyChanges(BinaryOWLInputStream inputStream, BinaryOWLOntologyDocumentAppendedChangeHandler changeHandler) throws IOException, BinaryOWLParseException {

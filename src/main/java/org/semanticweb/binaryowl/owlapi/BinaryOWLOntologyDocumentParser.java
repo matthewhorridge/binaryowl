@@ -37,8 +37,10 @@
  * limitations under the License.
  */
 
-package org.semanticweb.binaryowl;
+package org.semanticweb.binaryowl.owlapi;
 
+import org.semanticweb.binaryowl.BinaryOWLOntologyDocumentSerializer;
+import org.semanticweb.binaryowl.BinaryOWLParseException;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
 import org.semanticweb.owlapi.io.OWLParser;
 import org.semanticweb.owlapi.io.OWLParserException;
@@ -90,6 +92,6 @@ public class BinaryOWLOntologyDocumentParser implements OWLParser {
         final BinaryOWLOntologyBuildingHandler handler = new BinaryOWLOntologyBuildingHandler(configuration, ontology);
         final OWLDataFactory df = ontology.getOWLOntologyManager().getOWLDataFactory();
         serializer.read(is, handler, df);
-        return new BinaryOWLOntologyDocumentFormat();
+        return handler.getFormat();
     }
 }

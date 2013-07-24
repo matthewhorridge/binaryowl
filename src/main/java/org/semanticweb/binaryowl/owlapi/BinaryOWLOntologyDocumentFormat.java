@@ -37,21 +37,37 @@
  * limitations under the License.
  */
 
-package org.semanticweb.binaryowl;
+package org.semanticweb.binaryowl.owlapi;
 
-import org.semanticweb.owlapi.io.OWLParser;
-import org.semanticweb.owlapi.io.OWLParserFactory;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.binaryowl.BinaryOWLMetadata;
+import org.semanticweb.owlapi.model.OWLOntologyFormat;
 
 /**
  * Author: Matthew Horridge<br>
  * Stanford University<br>
  * Bio-Medical Informatics Research Group<br>
- * Date: 09/05/2012
+ * Date: 04/05/2012
  */
-public class BinaryOWLOntologyDocumentParserFactory implements OWLParserFactory {
+public class BinaryOWLOntologyDocumentFormat extends OWLOntologyFormat {
 
-    public OWLParser createParser(OWLOntologyManager owlOntologyManager) {
-        return new BinaryOWLOntologyDocumentParser();
+    private BinaryOWLMetadata documentMetadata;
+
+    public BinaryOWLOntologyDocumentFormat() {
+        documentMetadata = new BinaryOWLMetadata();
+    }
+
+    public BinaryOWLOntologyDocumentFormat(BinaryOWLMetadata documentMetadata) {
+        this.documentMetadata = documentMetadata;
+    }
+
+
+
+    public BinaryOWLMetadata getDocumentMetadata() {
+        return documentMetadata;
+    }
+
+    @Override
+    public String toString() {
+        return "Binary OWL Ontology Document";
     }
 }

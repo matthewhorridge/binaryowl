@@ -1,6 +1,11 @@
-package org.semanticweb.binaryowl;
+package org.semanticweb.binaryowl.owlapi;
 
+import org.semanticweb.binaryowl.BinaryOWLMetadata;
+import org.semanticweb.binaryowl.BinaryOWLOntologyDocumentHandler;
+import org.semanticweb.binaryowl.BinaryOWLOntologyDocumentPreamble;
+import org.semanticweb.binaryowl.BinaryOWLParseException;
 import org.semanticweb.binaryowl.change.OntologyChangeDataList;
+import org.semanticweb.binaryowl.owlapi.BinaryOWLOntologyDocumentFormat;
 import org.semanticweb.owlapi.change.*;
 import org.semanticweb.owlapi.model.*;
 
@@ -56,6 +61,9 @@ public class BinaryOWLOntologyBuildingHandler implements BinaryOWLOntologyDocume
         manager.addAxioms(ontology, mergedAxioms);
     }
 
+    public BinaryOWLOntologyDocumentFormat getFormat() {
+        return format;
+    }
 
     @Override
     public void handleBeginDocument() throws BinaryOWLParseException {

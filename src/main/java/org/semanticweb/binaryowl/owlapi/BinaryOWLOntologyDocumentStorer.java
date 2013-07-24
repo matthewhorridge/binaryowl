@@ -37,8 +37,10 @@
  * limitations under the License.
  */
 
-package org.semanticweb.binaryowl;
+package org.semanticweb.binaryowl.owlapi;
 
+import org.semanticweb.binaryowl.BinaryOWLOntologyDocumentSerializer;
+import org.semanticweb.binaryowl.owlapi.BinaryOWLOntologyDocumentFormat;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentTarget;
 import org.semanticweb.owlapi.model.*;
 
