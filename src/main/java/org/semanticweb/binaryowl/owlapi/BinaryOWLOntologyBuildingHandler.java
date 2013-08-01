@@ -133,7 +133,7 @@ public class BinaryOWLOntologyBuildingHandler implements BinaryOWLOntologyDocume
 
     @Override
     public void handleOntologyAnnotations(Set<OWLAnnotation> annotations) {
-        this.annotations = annotations;
+        this.annotations.addAll(annotations);
     }
 
     @Override
