@@ -1,18 +1,61 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <name>Binary OWL</name>
-    <groupId>net.sourceforge.owlapitools</groupId>
-    <artifactId>binary-owl</artifactId>
+    <groupId>net.sourceforge.owlapi</groupId>
+    <artifactId>binaryowl</artifactId>
     <version>1.4.0-SNAPSHOT</version>
+    <description>A package that provides serialization and deserialization capabilities for the Binary OWL file format</description>
 
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
+
+    <licenses>
+        <license>
+            <name>GNU LGPL Version 3.0</name>
+            <url>http://www.gnu.org/licenses/lgpl.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <url>https://github.com/matthewhorridge/binaryowl</url>
+
+    <scm>
+        <connection>scm:git:git@github.com:matthewhorridge/binaryowl.git</connection>
+        <developerConnection>scm:git:git@github.com:matthewhorridge/binaryowl.git</developerConnection>
+        <url>git@github.com:matthewhorridge/binaryowl.git</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <id>matthewhorridge</id>
+            <name>Matthew Horridge</name>
+            <email>matthew.horridge@stanford.edu</email>
+        </developer>
+    </developers>
+
+    <issueManagement>
+        <system>github</system>
+        <url>https://github.com/matthewhorridge/binaryowl/issues</url>
+    </issueManagement>
+
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
 
     <dependencies>
         <dependency>
             <groupId>net.sourceforge.owlapi</groupId>
             <artifactId>owlapi-distribution</artifactId>
-            <version>3.4.3</version>
+            <version>3.4.8</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -23,7 +66,7 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>14.0.1</version>
+            <version>15.0</version>
         </dependency>
     </dependencies>
 
@@ -73,25 +116,25 @@
                 </executions>
             </plugin>
 
-            <!-- The Assembly Plugin allows providing an additional single-jar build. -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.2</version>
-                <configuration>
-                    <descriptors>
-                        <!-- <descriptor>owlapi-bin.xml</descriptor> -->
-                        <descriptor>distribution/src/assembly/bin.xml</descriptor>
-                    </descriptors>
-                </configuration>
-            </plugin>
+            <!--&lt;!&ndash; The Assembly Plugin allows providing an additional single-jar build. &ndash;&gt;-->
+            <!--<plugin>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-assembly-plugin</artifactId>-->
+            <!--<version>2.2</version>-->
+            <!--<configuration>-->
+            <!--<descriptors>-->
+            <!--&lt;!&ndash; <descriptor>owlapi-bin.xml</descriptor> &ndash;&gt;-->
+            <!--<descriptor>distribution/src/assembly/bin.xml</descriptor>-->
+            <!--</descriptors>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
 
-            <!-- The Surefire Plugin is for error reporting. -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.7.1</version>
-            </plugin>
+            <!--&lt;!&ndash; The Surefire Plugin is for error reporting. &ndash;&gt;-->
+            <!--<plugin>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-surefire-plugin</artifactId>-->
+            <!--<version>2.7.1</version>-->
+            <!--</plugin>-->
 
         </plugins>
     </build>
