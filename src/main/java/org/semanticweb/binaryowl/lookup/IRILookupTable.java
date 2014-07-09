@@ -155,7 +155,7 @@ public class IRILookupTable {
                 os.writeUTF("");
             }
             else {
-                os.writeUTF(fragment);//bytes = fragment.getBytes();
+                os.writeUTF(fragment);
             }
         }
     }
