@@ -178,7 +178,7 @@ public class OWLLiteralSerializer extends OWLObjectSerializer<OWLLiteral> {
 
         byte[] literalBytes;
         if (literal instanceof OWLLiteralImplNoCompression) {
-            literalBytes = ((OWLLiteralImplNoCompression) literal).getLiteral().getBytes();
+            literalBytes = ((OWLLiteralImplNoCompression) literal).getLiteral().getBytes(UTF_8);
         }
         else {
             literalBytes = literal.getLiteral().getBytes(UTF_8);

@@ -8,6 +8,7 @@
     <version>1.4.1-SNAPSHOT</version>
     <description>A package that provides serialization and deserialization capabilities for the Binary OWL file format</description>
 
+
     <parent>
         <groupId>org.sonatype.oss</groupId>
         <artifactId>oss-parent</artifactId>
@@ -67,10 +68,28 @@
             <artifactId>guava</artifactId>
             <version>15.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>1.9.5</version>
+        </dependency>
     </dependencies>
 
     <build>
         <plugins>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.17</version>
+                <configuration>
+                    <!-- Check that we are not vulnerable to platform specific encodings -->
+                    <!--
+                    I don't know a better way of doing this.  All JVMs must support ISO-8859-1
+                    so we can check that this non-UTF-8 encoding can be used to pass the tests.
+                    -->
+                    <argLine>-Dfile.encoding=ISO-8859-1</argLine>
+                </configuration>
+            </plugin>
 
             <!-- In the Compiler Plugin we specify the encoding and the compiler version. -->
             <plugin>
