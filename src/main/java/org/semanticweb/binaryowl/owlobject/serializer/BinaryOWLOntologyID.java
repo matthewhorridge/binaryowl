@@ -39,6 +39,7 @@
 
 package org.semanticweb.binaryowl.owlobject.serializer;
 
+import com.google.common.base.Optional;
 import org.semanticweb.binaryowl.BinaryOWLParseException;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
@@ -81,14 +82,15 @@ public class BinaryOWLOntologyID {
             outputStream.writeByte(ANONYMOUS_ONTOLOGY_MARKER);
         }
         else {
-            if(ontologyID.getVersionIRI() == null) {
-                outputStream.writeByte(ONTOLOGY_IRI_NO_VERSION_IRI_MARKER);
-                outputStream.writeIRI(ontologyID.getOntologyIRI());
+            if(ontologyID.getVersionIRI().isPresent()) {
+                outputStream.writeByte(ONTOLOGY_IRI_PLUS_VERSION_IRI_MARKER);
+                outputStream.writeIRI(ontologyID.getOntologyIRI().get());
+                outputStream.writeIRI(ontologyID.getVersionIRI().get());
             }
             else {
-                outputStream.writeByte(ONTOLOGY_IRI_PLUS_VERSION_IRI_MARKER);
-                outputStream.writeIRI(ontologyID.getOntologyIRI());
-                outputStream.writeIRI(ontologyID.getVersionIRI());
+                outputStream.writeByte(ONTOLOGY_IRI_NO_VERSION_IRI_MARKER);
+                outputStream.writeIRI(ontologyID.getOntologyIRI().get());
+
             }
         }
     }
@@ -102,13 +104,13 @@ public class BinaryOWLOntologyID {
             if(marker == 1) {
                 IRISerializer serializer = new IRISerializer();
                 IRI ontologyIRI = serializer.readObject(inputStream);
-                ontologyID = new OWLOntologyID(ontologyIRI);
+                ontologyID = new OWLOntologyID(Optional.of(ontologyIRI), Optional.<IRI>absent());
             }
             else if(marker == 2) {
                 IRISerializer serializer = new IRISerializer();
                 IRI ontologyIRI = serializer.readObject(inputStream);
                 IRI versionIRI = serializer.readObject(inputStream);
-                ontologyID = new OWLOntologyID(ontologyIRI, versionIRI);
+                ontologyID = new OWLOntologyID(Optional.of(ontologyIRI), Optional.of(versionIRI));
             }
             else {
                 throw new BinaryOWLParseException("Unexpected OntologyID marker: " + marker);

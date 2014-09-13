@@ -68,7 +68,7 @@ public class OWLHasKeyAxiomSerializer extends AbstractAxiomSerializer<OWLHasKeyA
         OWLClassExpression classExpression = inputStream.readOWLObject();
         Set<OWLObjectPropertyExpression> objectPropertyExpressions = inputStream.readOWLObjects();
         Set<OWLDataPropertyExpression> dataPropertyExpressions = inputStream.readOWLObjects();
-        Set<OWLPropertyExpression<?, ?>> expressions = new HashSet<OWLPropertyExpression<?, ?>>();
+        Set<OWLPropertyExpression> expressions = new HashSet<OWLPropertyExpression>();
         expressions.addAll(objectPropertyExpressions);
         expressions.addAll(dataPropertyExpressions);
         return inputStream.getDataFactory().getOWLHasKeyAxiom(classExpression, expressions, annotations);

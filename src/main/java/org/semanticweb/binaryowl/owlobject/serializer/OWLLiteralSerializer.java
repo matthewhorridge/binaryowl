@@ -49,6 +49,7 @@ import uk.ac.manchester.cs.owl.owlapi.OWLDatatypeImpl;
 import uk.ac.manchester.cs.owl.owlapi.OWLLiteralImplNoCompression;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 /**
  * Author: Matthew Horridge<br>
@@ -58,7 +59,7 @@ import java.io.IOException;
  */
 public class OWLLiteralSerializer extends OWLObjectSerializer<OWLLiteral> {
 
-    public static final String UTF_8 = "UTF-8";
+    public static final Charset UTF_8 = Charset.forName("UTF-8");
 
 //    public static final byte NOT_INDEXED_MARKER = -2;
 
@@ -110,11 +111,11 @@ public class OWLLiteralSerializer extends OWLObjectSerializer<OWLLiteral> {
             if (langMarker == LANG_MARKER) {
                 String lang = is.readUTF();
                 byte[] literalBytes = readBytes(is);
-                return new OWLLiteralImplNoCompression(literalBytes, lang, RDF_PLAIN_LITERAL_DATATYPE);
+                return is.getDataFactory().getOWLLiteral(new String(literalBytes, UTF_8), lang);
             }
             else if (langMarker == NO_LANG_MARKER) {
                 byte[] literalBytes = readBytes(is);
-                return new OWLLiteralImplNoCompression(literalBytes, null, RDF_PLAIN_LITERAL_DATATYPE);
+                return is.getDataFactory().getOWLLiteral(new String(literalBytes, UTF_8), RDF_PLAIN_LITERAL_DATATYPE);
             }
             else {
                 throw new IOException("Unknown lang marker: " + langMarker);
@@ -122,7 +123,7 @@ public class OWLLiteralSerializer extends OWLObjectSerializer<OWLLiteral> {
         }
         else if(typeMarker == XSD_STRING_MARKER) {
             byte[] literalBytes = readBytes(is);
-            return new OWLLiteralImplNoCompression(literalBytes, null, XSD_STRING_DATATYPE);
+            return is.getDataFactory().getOWLLiteral(new String(literalBytes, UTF_8), XSD_STRING_DATATYPE);
         }
         else if(typeMarker == XSD_BOOLEAN_MARKER) {
             if(is.readBoolean()) {
@@ -136,7 +137,7 @@ public class OWLLiteralSerializer extends OWLObjectSerializer<OWLLiteral> {
 
             OWLDatatype datatype = is.readDatatypeIRI();
             byte[] literalBytes = readBytes(is);
-            return new OWLLiteralImplNoCompression(literalBytes, null, datatype);
+            return is.getDataFactory().getOWLLiteral(new String(literalBytes, UTF_8), datatype);
         }
         else {
             throw new RuntimeException("Unknown type marker: " + typeMarker);

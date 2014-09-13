@@ -113,7 +113,7 @@ public class IRILookupTable {
             int iriIndex = iri2IndexMap.size();
             iri2IndexMap.put(iri, iriIndex);
         }
-        String start = iri.getStart();
+        String start = iri.getNamespace();
         if (!startIndex.containsKey(start)) {
             startIndex.put(start, startIndex.size());
         }
@@ -148,7 +148,7 @@ public class IRILookupTable {
         }
         os.writeInt(iri2IndexMap.size());
         for (IRI iri : iri2IndexMap.keySet()) {
-            int si = startIndex.get(iri.getStart());
+            int si = startIndex.get(iri.getNamespace());
             os.writeInt(si);
             String fragment = iri.getFragment();
             if (fragment == null) {
@@ -384,7 +384,7 @@ public class IRILookupTable {
         int index = getIndex(iri);
         if(index == -1) {
             writeIndex(NOT_INDEXED_MARKER, dataOutput);
-            String start = iri.getStart();
+            String start = iri.getNamespace();
             if(start == null) {
                 dataOutput.writeByte(0);
             }

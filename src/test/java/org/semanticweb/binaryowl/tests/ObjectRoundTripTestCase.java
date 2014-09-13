@@ -1,5 +1,6 @@
 package org.semanticweb.binaryowl.tests;
 
+import com.google.common.base.Optional;
 import org.junit.Test;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
@@ -597,7 +598,7 @@ public class ObjectRoundTripTestCase {
         roundTrip(ont);
 
         // IRI + Version IRI
-        man.applyChange(new SetOntologyID(ont, new OWLOntologyID(A.getIRI(), B.getIRI())));
+        man.applyChange(new SetOntologyID(ont, new OWLOntologyID(Optional.of(A.getIRI()), Optional.of(B.getIRI()))));
         roundTrip(ont);
     }
 
