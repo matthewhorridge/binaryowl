@@ -33,6 +33,8 @@ public class BinaryOWLOutputStream extends OutputStream {
 
     private BinaryOWLVersion version = BinaryOWLVersion.getVersion(1);
 
+    private final SetTransformer setTransformer;
+
     public BinaryOWLOutputStream(OutputStream dataOutput, BinaryOWLVersion version) {
         if(dataOutput instanceof DataOutputStream) {
             this.dataOutput = (DataOutput) dataOutput;
@@ -42,11 +44,19 @@ public class BinaryOWLOutputStream extends OutputStream {
         }
         this.version = version;
         lookupTable = LookupTable.emptyLookupTable();
+        this.setTransformer = new PassThroughSetTransformer();
     }
 
     public BinaryOWLOutputStream(DataOutput dataOutput, LookupTable lookupTable) {
         this.dataOutput = dataOutput;
         this.lookupTable = lookupTable;
+        this.setTransformer = new PassThroughSetTransformer();
+    }
+
+    public BinaryOWLOutputStream(DataOutput dataOutput, SetTransformer setTransformer) {
+        this.dataOutput = dataOutput;
+        this.setTransformer = setTransformer;
+        this.lookupTable = LookupTable.emptyLookupTable();
     }
 
     public BinaryOWLVersion getVersion() {
@@ -60,7 +70,7 @@ public class BinaryOWLOutputStream extends OutputStream {
     public void writeOWLObjects(Set<? extends OWLObject> objects) throws IOException {
         final int size = objects.size();
         writeCollectionSize(size, dataOutput);
-        for(OWLObject object : objects) {
+        for(OWLObject object : setTransformer.transform(objects)) {
             writeOWLObject(object);
         }
     }
