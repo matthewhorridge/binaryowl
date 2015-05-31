@@ -43,6 +43,7 @@ import org.semanticweb.binaryowl.change.OntologyChangeRecordList;
 import org.semanticweb.binaryowl.chunk.SkipSetting;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
+import org.semanticweb.owlapi.change.OWLOntologyChangeRecord;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
 
@@ -63,13 +64,22 @@ public class BinaryOWLOntologyChangeLog {
         this.appendChanges(changeList, timestamp, changeListMetadata, os);
         os.close();
     }
-    
+
     public void appendChanges(List<OWLOntologyChange> changeList, long timestamp, BinaryOWLMetadata changeListMetadata, OutputStream os) throws IOException {
+        this.appendChanges(new OntologyChangeRecordList(changeList, timestamp, changeListMetadata), os);
+    }
+
+    public void appendChanges(OntologyChangeRecordList changeList, File file) throws IOException {
+        final BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(file, true));
+        this.appendChanges(changeList, os);
+        os.close();
+    }
+
+    public void appendChanges(OntologyChangeRecordList changeList, OutputStream os) throws IOException {
         DataOutputStream dos = new DataOutputStream(os);
         dos.writeByte(BinaryOWLOntologyDocumentSerializer.CHUNK_FOLLOWS_MARKER);
-        OntologyChangeRecordList changeRecordList = new OntologyChangeRecordList(changeList, timestamp, changeListMetadata);
         BinaryOWLOutputStream outputStream = new BinaryOWLOutputStream(dos, BinaryOWLVersion.getVersion(1));
-        changeRecordList.write(outputStream);
+        changeList.write(outputStream);
     }
 
     public void readChanges(InputStream inputStream, OWLDataFactory dataFactory, BinaryOWLChangeLogHandler handler) throws IOException, BinaryOWLParseException {
