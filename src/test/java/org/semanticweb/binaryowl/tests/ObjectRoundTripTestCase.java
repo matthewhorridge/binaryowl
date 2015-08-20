@@ -116,10 +116,10 @@ public class ObjectRoundTripTestCase {
 
     @Test
     public void _ObjectInverseOf() {
-        OWLObjectInverseOf prop = ObjectInverseOf(R);
+        OWLObjectPropertyExpression prop = R.getInverseProperty();
         roundTrip(prop);
 
-        OWLObjectInverseOf propInv = ObjectInverseOf(prop);
+        OWLObjectPropertyExpression propInv = prop.getInverseProperty();
         roundTrip(propInv);
     }
 
