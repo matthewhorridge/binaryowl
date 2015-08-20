@@ -60,8 +60,7 @@ public class IRILookupTable {
 
     private Map<String, Integer> startIndex = new LinkedHashMap<String, Integer>();
 
-    //private Map<IRI, Integer> iri2IndexMap = new LinkedHashMap<IRI, Integer>();
-    private Map<IRI, Integer> iri2IndexMap = new TreeMap<>();
+    private Map<IRI, Integer> iri2IndexMap = new LinkedHashMap<IRI, Integer>();
 
     private IRI [] iriTable;
     
@@ -143,7 +142,6 @@ public class IRILookupTable {
     }
 
     public void write(DataOutput os) throws IOException {
-        renumberIRIMappings();
         os.writeInt(startIndex.size());
         for (String start : startIndex.keySet()) {
             os.writeUTF(start);
@@ -159,13 +157,6 @@ public class IRILookupTable {
             else {
                 os.writeUTF(fragment);
             }
-        }
-    }
-
-    private void renumberIRIMappings() {
-        int n=0;
-        for (IRI iri : iri2IndexMap.keySet()) {
-            iri2IndexMap.put(iri,n++);
         }
     }
 
