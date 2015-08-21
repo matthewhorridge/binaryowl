@@ -2,6 +2,7 @@ package org.semanticweb.binaryowl.stream;
 
 import org.semanticweb.binaryowl.BinaryOWLParseException;
 import org.semanticweb.binaryowl.BinaryOWLVersion;
+import org.semanticweb.binaryowl.lookup.IRILookupTable;
 import org.semanticweb.binaryowl.owlobject.OWLObjectBinaryType;
 import org.semanticweb.binaryowl.lookup.LookupTable;
 import org.semanticweb.binaryowl.owlobject.serializer.OWLLiteralSerializer;
@@ -25,7 +26,7 @@ public class BinaryOWLInputStream extends InputStream {
 
     private DataInputStream dataInput;
     
-    private LookupTable lookupTable;
+    private ArrayDeque<LookupTable> lookupTableStack;
     
     private OWLDataFactory dataFactory;
 
@@ -50,9 +51,25 @@ public class BinaryOWLInputStream extends InputStream {
         else {
             this.dataInput = new DataInputStream(inputStream);
         }
-        this.lookupTable = lookupTable;
+        this.lookupTableStack = new ArrayDeque<LookupTable>();
+        this.lookupTableStack.push(lookupTable);
         this.dataFactory = dataFactory;
         this.version = version;
+    }
+
+    public void pushLookupTable(LookupTable lookupTable) {
+        lookupTableStack.push(lookupTable);
+    }
+
+    public LookupTable popLookupTable() {
+        if(lookupTableStack.size() == 1) {
+            throw new RuntimeException("Cannot pop last LookupTable from the lookup table stack");
+        }
+        return lookupTableStack.pop();
+    }
+
+    private LookupTable peekLookupTable() {
+        return lookupTableStack.peek();
     }
 
     public BinaryOWLVersion getVersion() {
@@ -100,31 +117,31 @@ public class BinaryOWLInputStream extends InputStream {
     }
 
     public IRI readIRI() throws IOException {
-        return lookupTable.readIRI(dataInput);
+        return peekLookupTable().readIRI(dataInput);
     }
     
     public OWLClass readClassIRI() throws IOException {
-        return lookupTable.readClassIRI(dataInput);
+        return peekLookupTable().readClassIRI(dataInput);
     }
     
     public OWLObjectProperty readObjectPropertyIRI() throws IOException {
-        return lookupTable.readObjectPropertyIRI(dataInput);
+        return peekLookupTable().readObjectPropertyIRI(dataInput);
     }
     
     public OWLDataProperty readDataPropertyIRI() throws IOException {
-        return lookupTable.readDataPropertyIRI(dataInput);
+        return peekLookupTable().readDataPropertyIRI(dataInput);
     }
 
     public OWLAnnotationProperty readAnnotationPropertyIRI() throws IOException {
-        return lookupTable.readAnnotationPropertyIRI(dataInput);
+        return peekLookupTable().readAnnotationPropertyIRI(dataInput);
     }
 
     public OWLNamedIndividual readIndividualIRI() throws IOException {
-        return lookupTable.readIndividualIRI(dataInput);
+        return peekLookupTable().readIndividualIRI(dataInput);
     }
 
     public OWLDatatype readDatatypeIRI() throws IOException {
-        return lookupTable.readDatatypeIRI(dataInput);
+        return peekLookupTable().readDatatypeIRI(dataInput);
     }
 
     public OWLLiteral readLiteral() throws IOException, BinaryOWLParseException {
@@ -136,6 +153,11 @@ public class BinaryOWLInputStream extends InputStream {
             return readOWLObject();
         }
     }
+
+    public IRILookupTable readIRILookupTable() throws IOException {
+        return new IRILookupTable(dataInput);
+    }
+
     
     private Map<Integer, OWLAnonymousIndividual> map = new HashMap<Integer, OWLAnonymousIndividual>();
 

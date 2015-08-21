@@ -44,6 +44,8 @@ import org.semanticweb.binaryowl.BinaryOWLParseException;
 import org.semanticweb.binaryowl.chunk.ChunkUtil;
 import org.semanticweb.binaryowl.chunk.SkipSetting;
 import org.semanticweb.binaryowl.chunk.TimeStampedMetadataChunk;
+import org.semanticweb.binaryowl.lookup.IRILookupTable;
+import org.semanticweb.binaryowl.lookup.LookupTable;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
 import org.semanticweb.owlapi.change.*;
@@ -67,8 +69,10 @@ import java.util.*;
  */
 public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
     
-    private static final short EXPECTED_RECORD_VERSION = 1;
-    
+    private static final short VERSION_1 = 1;
+
+    private static final short VERSION_2 = 2;
+
     public static final int CHUNK_TYPE_MARKER = ChunkUtil.toInt("ochr");
 
     private long timestamp;
@@ -145,12 +149,15 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
         DataOutputStream bufDataOutputStream = new DataOutputStream(buf);
 
         // TODO: Lookup table should go here - VERSION 2
-//        LookupTable lookupTable = new LookupTable(new IRILookupTable(getChangeSignature()));
-
-        BinaryOWLOutputStream bufOWLOutputStream = new BinaryOWLOutputStream(bufDataOutputStream, os.getVersion());
+        IRILookupTable iriLookupTable = new IRILookupTable(getChangeSignature());
+        LookupTable lookupTable = new LookupTable(iriLookupTable);
+        BinaryOWLOutputStream bufOWLOutputStream = new BinaryOWLOutputStream(bufDataOutputStream, lookupTable);
 
         // Record format version
-        bufDataOutputStream.writeShort(EXPECTED_RECORD_VERSION);
+        bufDataOutputStream.writeShort(VERSION_2);
+
+        // LookupTable
+        lookupTable.getIRILookupTable().write(bufDataOutputStream);
 
         // Timestamp
         bufDataOutputStream.writeLong(timestamp);
@@ -241,8 +248,14 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
         // Record format version
         short versionNumber = inputStream.readShort();
         // For the moment we can only handle version 1 stuff
-        if(versionNumber != EXPECTED_RECORD_VERSION) {
-            throw new BinaryOWLParseException("Invalid version specifier.  Found 0x" + Integer.toHexString(versionNumber) + " but expected 0x" + Integer.toHexString(versionNumber));
+        if(versionNumber != VERSION_1 && versionNumber != VERSION_2) {
+            throw new BinaryOWLParseException("Invalid version specifier.  Found 0x" + Integer.toHexString(versionNumber) + " but expected 0x" + Integer.toHexString(VERSION_1) + " or 0x" + Integer.toHexString(VERSION_2));
+        }
+
+        if(versionNumber == VERSION_2) {
+            IRILookupTable iriLookupTable = inputStream.readIRILookupTable();
+            LookupTable lookupTable = new LookupTable(iriLookupTable);
+            inputStream.pushLookupTable(lookupTable);
         }
 
         // Actual data
@@ -263,6 +276,10 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
         }
         else {
             changeRecords = Collections.unmodifiableList(readRecords(inputStream));
+        }
+
+        if(versionNumber == VERSION_2) {
+            inputStream.popLookupTable();
         }
     }
 
