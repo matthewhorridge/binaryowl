@@ -39,6 +39,7 @@
 
 package org.semanticweb.binaryowl.owlobject.serializer;
 
+import com.google.common.base.Charsets;
 import org.semanticweb.binaryowl.BinaryOWLParseException;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
@@ -75,17 +76,12 @@ public class OWLLiteralSerializer extends OWLObjectSerializer<OWLLiteral> {
     private static final byte NO_LANG_MARKER = 0;
 
 
-    private static final OWLDatatype RDF_PLAIN_LITERAL_DATATYPE = new OWLDatatypeImpl(OWL2Datatype.RDF_PLAIN_LITERAL.getIRI());
-
     private static final OWLDatatype XSD_STRING_DATATYPE = new OWLDatatypeImpl(OWL2Datatype.XSD_STRING.getIRI());
 
     private static final OWLDatatype XSD_BOOLEAN_DATATYPE = new OWLDatatypeImpl(OWL2Datatype.XSD_BOOLEAN.getIRI());
 
 
 
-    private static final OWLLiteral BOOLEAN_TRUE = new OWLLiteralImplNoCompression("true", null, XSD_BOOLEAN_DATATYPE);
-
-    private static final OWLLiteral BOOLEAN_FALSE = new OWLLiteralImplNoCompression("false", null, XSD_BOOLEAN_DATATYPE);
 
     @Override
     protected void writeObject(OWLLiteral object, BinaryOWLOutputStream outputStream) throws IOException {
@@ -109,34 +105,34 @@ public class OWLLiteralSerializer extends OWLObjectSerializer<OWLLiteral> {
             int langMarker = is.readByte();
             if (langMarker == LANG_MARKER) {
                 String lang = is.readUTF();
-                byte[] literalBytes = readBytes(is);
-                return new OWLLiteralImplNoCompression(literalBytes, lang, RDF_PLAIN_LITERAL_DATATYPE);
+                String s = new String(readBytes(is), Charsets.UTF_8);
+                return is.getDataFactory().getOWLLiteral(s, lang);
             }
             else if (langMarker == NO_LANG_MARKER) {
-                byte[] literalBytes = readBytes(is);
-                return new OWLLiteralImplNoCompression(literalBytes, null, RDF_PLAIN_LITERAL_DATATYPE);
+                String s = new String(readBytes(is), Charsets.UTF_8);
+                return is.getDataFactory().getOWLLiteral(s, "");
             }
             else {
                 throw new IOException("Unknown lang marker: " + langMarker);
             }
         }
         else if(typeMarker == XSD_STRING_MARKER) {
-            byte[] literalBytes = readBytes(is);
-            return new OWLLiteralImplNoCompression(literalBytes, null, XSD_STRING_DATATYPE);
+            String s = new String(readBytes(is), Charsets.UTF_8);
+            return is.getDataFactory().getOWLLiteral(s);
         }
         else if(typeMarker == XSD_BOOLEAN_MARKER) {
             if(is.readBoolean()) {
-                return BOOLEAN_TRUE;
+                return is.getDataFactory().getOWLLiteral(true);
             }
             else {
-                return BOOLEAN_FALSE;
+                return is.getDataFactory().getOWLLiteral(false);
             }
         }
         else if (typeMarker == OTHER_DATATYPE_MARKER) {
 
             OWLDatatype datatype = is.readDatatypeIRI();
-            byte[] literalBytes = readBytes(is);
-            return new OWLLiteralImplNoCompression(literalBytes, null, datatype);
+            String s = new String(readBytes(is), Charsets.UTF_8);
+            return is.getDataFactory().getOWLLiteral(s, datatype);
         }
         else {
             throw new RuntimeException("Unknown type marker: " + typeMarker);
