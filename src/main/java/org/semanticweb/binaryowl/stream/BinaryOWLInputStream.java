@@ -448,6 +448,8 @@ public class BinaryOWLInputStream extends InputStream {
      *         encountered before a byte can be read.
      * @throws java.io.IOException if an I/O error occurs.
      */
+    @SuppressWarnings("deprecation")
+    @Deprecated
     public String readLine() throws IOException {
         return dataInput.readLine();
     }
