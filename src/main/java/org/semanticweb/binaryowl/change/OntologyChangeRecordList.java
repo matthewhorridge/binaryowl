@@ -39,6 +39,7 @@
 
 package org.semanticweb.binaryowl.change;
 
+import com.google.common.collect.ImmutableList;
 import org.semanticweb.binaryowl.BinaryOWLMetadata;
 import org.semanticweb.binaryowl.BinaryOWLParseException;
 import org.semanticweb.binaryowl.chunk.ChunkUtil;
@@ -57,6 +58,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.*;
+
+import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Author: Matthew Horridge<br>
@@ -79,7 +82,7 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
     
     private BinaryOWLMetadata metadata;
     
-    private List<OWLOntologyChangeRecord> changeRecords;
+    private ImmutableList<OWLOntologyChangeRecord> changeRecords;
     
     public OntologyChangeRecordList(List<OWLOntologyChange> changes, long timestamp, BinaryOWLMetadata metadata) {
         this(timestamp, metadata, convertToChangeRecordList(changes));
@@ -94,9 +97,14 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
     }
 
     public OntologyChangeRecordList(long timestamp, BinaryOWLMetadata metadata, List<OWLOntologyChangeRecord> changeRecords) {
+        this(timestamp, metadata, ImmutableList.copyOf(changeRecords));
+    }
+
+
+    public OntologyChangeRecordList(long timestamp, BinaryOWLMetadata metadata, ImmutableList<OWLOntologyChangeRecord> changeRecords) {
         this.timestamp = timestamp;
-        this.metadata = metadata;
-        this.changeRecords = Collections.unmodifiableList(new ArrayList<OWLOntologyChangeRecord>(changeRecords));
+        this.metadata = checkNotNull(metadata);
+        this.changeRecords = checkNotNull(changeRecords);
     }
     
     public OntologyChangeRecordList(BinaryOWLInputStream inputStream, SkipSetting skipSetting) throws IOException, BinaryOWLParseException {
@@ -148,7 +156,6 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
         DataOutputStream bufDataOutputStream = new DataOutputStream(buf);
 
-        // TODO: Lookup table should go here - VERSION 2
         IRILookupTable iriLookupTable = new IRILookupTable(getChangeSignature());
         LookupTable lookupTable = new LookupTable(iriLookupTable);
         BinaryOWLOutputStream bufOWLOutputStream = new BinaryOWLOutputStream(bufDataOutputStream, lookupTable);
@@ -272,10 +279,10 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
         if(skipSetting.isSkipData()) {
             int bytesToSkip = chunkSize - 4 - metadataSize;
             inputStream.skipBytes(bytesToSkip);
-            changeRecords = Collections.emptyList();
+            changeRecords = ImmutableList.of();
         }
         else {
-            changeRecords = Collections.unmodifiableList(readRecords(inputStream));
+            changeRecords = readRecords(inputStream);
         }
 
         if(versionNumber == VERSION_2) {
@@ -283,16 +290,16 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
         }
     }
 
-    private static List<OWLOntologyChangeRecord> readRecords(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
+    private static ImmutableList<OWLOntologyChangeRecord> readRecords(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
         int numberOfRuns = inputStream.readInt();
-        List<OWLOntologyChangeRecord> records = new ArrayList<OWLOntologyChangeRecord>(numberOfRuns + 1);
+        ImmutableList.Builder<OWLOntologyChangeRecord> recordsBuilder = ImmutableList.builder();
         for(int i = 0; i < numberOfRuns; i++) {
             OntologyChangeRecordRun run = new OntologyChangeRecordRun(inputStream);
             for(OWLOntologyChangeData info : run.getChangeDataList()) {
-                records.add(new OWLOntologyChangeRecord(run.getOntologyID(), info));
+                recordsBuilder.add(new OWLOntologyChangeRecord(run.getOntologyID(), info));
             }
         }
-        return records;
+        return recordsBuilder.build();
     }
 
     @Override
