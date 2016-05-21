@@ -1,5 +1,7 @@
 package org.semanticweb.binaryowl.tests;
 
+import com.google.common.base.Optional;
+import org.junit.Before;
 import org.junit.Test;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.*;
@@ -23,7 +25,7 @@ import static org.semanticweb.binaryowl.tests.TestUtil.roundTrip;
  */
 public class ObjectRoundTripTestCase {
 
-    private static DefaultPrefixManager pm = new DefaultPrefixManager("http://another.com/ontology#");
+    private static DefaultPrefixManager pm = new DefaultPrefixManager();
 
     private static OWLClass A = Class("A", pm);
 
@@ -56,6 +58,11 @@ public class ObjectRoundTripTestCase {
     public static final OWLDatatype DTI = Datatype(XSDVocabulary.INTEGER.getIRI());
 
     public static final OWLLiteral LIT = Literal("Test");
+
+    @Before
+    public void setUp() throws Exception {
+        pm.setDefaultPrefix("http://another.com/ontology#");
+    }
 
     @Test
     public void _Class() {
@@ -115,10 +122,10 @@ public class ObjectRoundTripTestCase {
 
     @Test
     public void _ObjectInverseOf() {
-        OWLObjectInverseOf prop = ObjectInverseOf(R);
+        OWLObjectPropertyExpression prop = R.getInverseProperty();
         roundTrip(prop);
 
-        OWLObjectInverseOf propInv = ObjectInverseOf(prop);
+        OWLObjectPropertyExpression propInv = prop.getInverseProperty();
         roundTrip(propInv);
     }
 
@@ -597,7 +604,7 @@ public class ObjectRoundTripTestCase {
         roundTrip(ont);
 
         // IRI + Version IRI
-        man.applyChange(new SetOntologyID(ont, new OWLOntologyID(A.getIRI(), B.getIRI())));
+        man.applyChange(new SetOntologyID(ont, new OWLOntologyID(Optional.of(A.getIRI()), Optional.of(B.getIRI()))));
         roundTrip(ont);
     }
 

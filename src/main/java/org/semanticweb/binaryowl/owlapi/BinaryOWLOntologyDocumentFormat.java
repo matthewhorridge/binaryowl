@@ -40,7 +40,10 @@
 package org.semanticweb.binaryowl.owlapi;
 
 import org.semanticweb.binaryowl.BinaryOWLMetadata;
-import org.semanticweb.owlapi.model.OWLOntologyFormat;
+import org.semanticweb.owlapi.formats.PrefixDocumentFormat;
+import org.semanticweb.owlapi.model.OWLDocumentFormatImpl;
+
+import javax.annotation.Nonnull;
 
 /**
  * Author: Matthew Horridge<br>
@@ -48,7 +51,7 @@ import org.semanticweb.owlapi.model.OWLOntologyFormat;
  * Bio-Medical Informatics Research Group<br>
  * Date: 04/05/2012
  */
-public class BinaryOWLOntologyDocumentFormat extends OWLOntologyFormat {
+public class BinaryOWLOntologyDocumentFormat extends OWLDocumentFormatImpl {
 
     private BinaryOWLMetadata documentMetadata;
 
@@ -60,8 +63,6 @@ public class BinaryOWLOntologyDocumentFormat extends OWLOntologyFormat {
         this.documentMetadata = documentMetadata;
     }
 
-
-
     public BinaryOWLMetadata getDocumentMetadata() {
         return documentMetadata;
     }
@@ -69,5 +70,22 @@ public class BinaryOWLOntologyDocumentFormat extends OWLOntologyFormat {
     @Override
     public String toString() {
         return "Binary OWL Ontology Document";
+    }
+
+    @Override
+    public boolean isPrefixOWLOntologyFormat() {
+        return false;
+    }
+
+    @Nonnull
+    @Override
+    public PrefixDocumentFormat asPrefixOWLOntologyFormat() {
+        throw new ClassCastException("BinaryOWLOntologyDocumentFormat is not a prefix format");
+    }
+
+    @Nonnull
+    @Override
+    public String getKey() {
+        return "BinaryOWL";
     }
 }

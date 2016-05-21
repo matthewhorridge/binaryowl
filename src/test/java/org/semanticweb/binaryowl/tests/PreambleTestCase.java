@@ -7,7 +7,8 @@ import org.semanticweb.binaryowl.BinaryOWLVersion;
 
 import java.io.*;
 
-import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 /**
  * Author: Matthew Horridge<br>
@@ -26,7 +27,7 @@ public class PreambleTestCase {
         byte [] preambleBytes = new byte[] {'B', 'O', '2', 'O', 0, 1};
         BinaryOWLOntologyDocumentPreamble preamble = new BinaryOWLOntologyDocumentPreamble(new DataInputStream(new ByteArrayInputStream(preambleBytes)));
         BinaryOWLVersion version = preamble.getFileFormatVersion();
-        assertEquals(1, version.getVersion());
+        assertThat(version.getVersion(), is(1));
     }
 
     /**

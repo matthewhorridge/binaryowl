@@ -39,9 +39,16 @@
 
 package org.semanticweb.binaryowl.owlapi;
 
+import org.semanticweb.owlapi.formats.BinaryRDFDocumentFormatFactory;
 import org.semanticweb.owlapi.io.OWLParser;
 import org.semanticweb.owlapi.io.OWLParserFactory;
+import org.semanticweb.owlapi.model.OWLDocumentFormatFactory;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Author: Matthew Horridge<br>
@@ -51,7 +58,37 @@ import org.semanticweb.owlapi.model.OWLOntologyManager;
  */
 public class BinaryOWLOntologyDocumentParserFactory implements OWLParserFactory {
 
-    public OWLParser createParser(OWLOntologyManager owlOntologyManager) {
+    @Nonnull
+    @Override
+    public OWLParser createParser() {
         return new BinaryOWLOntologyDocumentParser();
+    }
+
+    @Nonnull
+    @Override
+    public OWLDocumentFormatFactory getSupportedFormat() {
+        return new BinaryRDFDocumentFormatFactory();
+    }
+
+    @Nullable
+    @Override
+    public String getDefaultMIMEType() {
+        return null;
+    }
+
+    @Nonnull
+    @Override
+    public List<String> getMIMETypes() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public boolean handlesMimeType(String mimeType) {
+        return false;
+    }
+
+    @Override
+    public OWLParser get() {
+        return createParser();
     }
 }

@@ -59,7 +59,7 @@ public class OWLDataHasValueSerializer extends OWLObjectSerializer<OWLDataHasVal
     @Override
     protected void writeObject(OWLDataHasValue object, BinaryOWLOutputStream outputStream) throws IOException {
         outputStream.writeOWLObject(object.getProperty());
-        outputStream.writeOWLObject(object.getValue());
+        outputStream.writeOWLObject(object.getFiller());
     }
 
     @Override

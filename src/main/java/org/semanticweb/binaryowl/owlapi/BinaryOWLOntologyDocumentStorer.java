@@ -44,6 +44,7 @@ import org.semanticweb.binaryowl.doc.OWLOntologyDocument;
 import org.semanticweb.owlapi.io.OWLOntologyDocumentTarget;
 import org.semanticweb.owlapi.model.*;
 
+import javax.annotation.Nonnull;
 import java.io.*;
 import java.net.URI;
 
@@ -53,22 +54,14 @@ import java.net.URI;
  * Bio-Medical Informatics Research Group<br>
  * Date: 04/05/2012
  */
-public class BinaryOWLOntologyDocumentStorer implements OWLOntologyStorer{
+public class BinaryOWLOntologyDocumentStorer implements OWLStorer {
 
-    public boolean canStoreOntology(OWLOntologyFormat ontologyFormat) {
+    public boolean canStoreOntology(@Nonnull OWLDocumentFormat ontologyFormat) {
         return ontologyFormat instanceof BinaryOWLOntologyDocumentFormat;
     }
 
-    public void storeOntology(OWLOntologyManager manager, OWLOntology ontology, IRI documentIRI, OWLOntologyFormat ontologyFormat) throws OWLOntologyStorageException, IOException {
-        storeOntology(ontology, documentIRI, ontologyFormat);
-    }
-
-    public void storeOntology(OWLOntologyManager manager, OWLOntology ontology, OWLOntologyDocumentTarget target, OWLOntologyFormat format) throws OWLOntologyStorageException, IOException {
-        storeOntology(ontology, target, format);
-    }
-
     @Override
-    public void storeOntology(OWLOntology ontology, IRI documentIRI, OWLOntologyFormat format) throws OWLOntologyStorageException, IOException {
+    public void storeOntology(@Nonnull OWLOntology ontology, @Nonnull IRI documentIRI, @Nonnull OWLDocumentFormat format) throws OWLOntologyStorageException, IOException {
         URI uri = documentIRI.toURI();
         if(!uri.isAbsolute()) {
             throw new OWLOntologyStorageException("Document IRI is not absolute: " + documentIRI);
@@ -78,12 +71,12 @@ public class BinaryOWLOntologyDocumentStorer implements OWLOntologyStorer{
     }
 
     @Override
-    public void storeOntology(OWLOntology ontology, OWLOntologyDocumentTarget target, OWLOntologyFormat format) throws OWLOntologyStorageException, IOException {
+    public void storeOntology(@Nonnull OWLOntology ontology, @Nonnull OWLOntologyDocumentTarget target, @Nonnull OWLDocumentFormat format) throws OWLOntologyStorageException, IOException {
         if(target.isOutputStreamAvailable()) {
             storeOntology(ontology, new BufferedOutputStream(target.getOutputStream()));
         }
         else {
-            throw new OWLRuntimeException("Unsupported target type");
+            throw new OWLOntologyStorageException("Unsupported target type");
         }
     }
 

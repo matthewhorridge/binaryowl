@@ -8,7 +8,8 @@ import java.io.DataOutput;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 /**
  * Author: Matthew Horridge<br>
@@ -24,8 +25,8 @@ public class VarUnsignedIntTestCase {
         DataOutput dataOutput = new DataOutputStream(os);
         BinaryOWLStreamUtil.writeVariableLengthUnsignedInt(0, dataOutput);
         final byte[] bytes = os.toByteArray();
-        assertEquals(bytes.length, 1);
-        assertEquals(bytes[0], 0);
+        assertThat(bytes.length, is(1));
+        assertThat(bytes[0], is((byte)0));
     }
 
     @Test
@@ -34,8 +35,8 @@ public class VarUnsignedIntTestCase {
         DataOutput dataOutput = new DataOutputStream(os);
         BinaryOWLStreamUtil.writeVariableLengthUnsignedInt(1, dataOutput);
         final byte[] bytes = os.toByteArray();
-        assertEquals(bytes.length, 1);
-        assertEquals(bytes[0], 1);
+        assertThat(bytes.length, is(1));
+        assertThat(bytes[0], is((byte)1));
     }
 
     @Test
@@ -44,8 +45,8 @@ public class VarUnsignedIntTestCase {
         DataOutput dataOutput = new DataOutputStream(os);
         BinaryOWLStreamUtil.writeVariableLengthUnsignedInt(126, dataOutput);
         final byte[] bytes = os.toByteArray();
-        assertEquals(bytes.length, 1);
-        assertEquals(bytes[0], 126);
+        assertThat(bytes.length, is(1));
+        assertThat(bytes[0], is((byte)126));
     }
 
     @Test
@@ -54,10 +55,10 @@ public class VarUnsignedIntTestCase {
         DataOutput dataOutput = new DataOutputStream(os);
         BinaryOWLStreamUtil.writeVariableLengthUnsignedInt(127, dataOutput);
         final byte[] bytes = os.toByteArray();
-        assertEquals(bytes.length, 3);
-        assertEquals(bytes[0], -2);
-        assertEquals(bytes[1], 0);
-        assertEquals(bytes[2], 127);
+        assertThat(bytes.length, is(3));
+        assertThat(bytes[0], is((byte)-2));
+        assertThat(bytes[1], is((byte)0));
+        assertThat(bytes[2], is((byte)127));
     }
 
     @Test
@@ -66,9 +67,9 @@ public class VarUnsignedIntTestCase {
         DataOutput dataOutput = new DataOutputStream(os);
         BinaryOWLStreamUtil.writeVariableLengthUnsignedInt(Short.MAX_VALUE - 1, dataOutput);
         final byte[] bytes = os.toByteArray();
-        assertEquals(bytes.length, 3);
-        assertEquals(bytes[1], 127);
-        assertEquals(bytes[2], -2);
+        assertThat(bytes.length, is(3));
+        assertThat(bytes[1], is((byte)127));
+        assertThat(bytes[2], is((byte)-2));
     }
 
     @Test
@@ -77,11 +78,11 @@ public class VarUnsignedIntTestCase {
         DataOutput dataOutput = new DataOutputStream(os);
         BinaryOWLStreamUtil.writeVariableLengthUnsignedInt(Short.MAX_VALUE + 1, dataOutput);
         final byte[] bytes = os.toByteArray();
-        assertEquals(bytes.length, 5);
-        assertEquals(bytes[1], 0);
-        assertEquals(bytes[2], 0);
-        assertEquals(bytes[3], -128);
-        assertEquals(bytes[4], 0);
+        assertThat(bytes.length, is(5));
+        assertThat(bytes[1], is((byte)0));
+        assertThat(bytes[2], is((byte)0));
+        assertThat(bytes[3], is((byte)-128));
+        assertThat(bytes[4], is((byte)0));
     }
 
 

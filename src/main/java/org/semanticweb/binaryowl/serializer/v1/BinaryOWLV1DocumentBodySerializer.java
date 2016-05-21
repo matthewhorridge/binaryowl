@@ -147,9 +147,15 @@ public class BinaryOWLV1DocumentBodySerializer implements BinaryOWLDocumentBodyS
         // Axiom tables - axioms by type
         for (AxiomType<?> axiomType : AxiomType.AXIOM_TYPES) {
             Set<? extends OWLAxiom> axioms = doc.getAxioms(axiomType);
+<<<<<<< HEAD
             ArrayList<? extends OWLAxiom> orderedAxioms = new ArrayList<OWLAxiom>(axioms);
             Collections.sort(orderedAxioms);
             LinkedHashSet<? extends OWLAxiom> tmp = new LinkedHashSet< OWLAxiom>(orderedAxioms);
+=======
+            ArrayList<? extends OWLAxiom> orderedAxioms = new ArrayList<>(axioms);
+            Collections.sort(orderedAxioms);
+            LinkedHashSet<? extends OWLAxiom> tmp = new LinkedHashSet<>(orderedAxioms);
+>>>>>>> owlapi-version-4
             lookupTableOutputStream.writeOWLObjects(tmp);
         }
 

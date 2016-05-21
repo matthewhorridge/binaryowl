@@ -39,6 +39,7 @@
 
 package org.semanticweb.binaryowl.owlobject.serializer;
 
+import com.google.common.base.Optional;
 import org.semanticweb.binaryowl.BinaryOWLParseException;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
@@ -60,20 +61,20 @@ public class OWLOntologySerializer extends OWLObjectSerializer<OWLOntology> {
     @Override
     protected void writeObject(OWLOntology object, BinaryOWLOutputStream outputStream) throws IOException {
         OWLOntologyID id = object.getOntologyID();
-        if(id.getOntologyIRI() != null) {
-            outputStream.writeUTF(id.getOntologyIRI().toString());
+        if(id.getOntologyIRI().isPresent()) {
+            outputStream.writeUTF(id.getOntologyIRI().get().toString());
         }
         else {
             outputStream.writeUTF("");
         }
-        if(id.getVersionIRI() != null) {
-            outputStream.writeUTF(id.getVersionIRI().toString());
+        if(id.getVersionIRI().isPresent()) {
+            outputStream.writeUTF(id.getVersionIRI().get().toString());
         }
         else {
             outputStream.writeUTF("");
         }
 
-        Set<IRI> importDecls = new HashSet<IRI>();
+        Set<IRI> importDecls = new HashSet<>();
         for(OWLImportsDeclaration decl : object.getImportsDeclarations()) {
             importDecls.add(decl.getIRI());
         }
@@ -94,10 +95,10 @@ public class OWLOntologySerializer extends OWLObjectSerializer<OWLOntology> {
             }
             else {
                 if(versionIRI.isEmpty()) {
-                    id = new OWLOntologyID(IRI.create(ontologyIRI));
+                    id = new OWLOntologyID(Optional.of(IRI.create(ontologyIRI)), Optional.<IRI>absent());
                 }
                 else {
-                    id = new OWLOntologyID(IRI.create(ontologyIRI), IRI.create(versionIRI));
+                    id = new OWLOntologyID(Optional.of(IRI.create(ontologyIRI)), Optional.of(IRI.create(versionIRI)));
                 }
             }
 

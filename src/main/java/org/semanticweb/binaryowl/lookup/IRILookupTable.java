@@ -39,6 +39,8 @@
 
 package org.semanticweb.binaryowl.lookup;
 
+import com.google.common.base.*;
+import com.google.common.base.Optional;
 import org.semanticweb.binaryowl.doc.OWLOntologyDocument;
 import org.semanticweb.owlapi.model.*;
 import uk.ac.manchester.cs.owl.owlapi.*;
@@ -113,7 +115,7 @@ public class IRILookupTable {
             int iriIndex = iri2IndexMap.size();
             iri2IndexMap.put(iri, iriIndex);
         }
-        String start = iri.getStart();
+        String start = iri.getNamespace();
         if (!startIndex.containsKey(start)) {
             startIndex.put(start, startIndex.size());
         }
@@ -148,14 +150,14 @@ public class IRILookupTable {
         }
         os.writeInt(iri2IndexMap.size());
         for (IRI iri : iri2IndexMap.keySet()) {
-            int si = startIndex.get(iri.getStart());
+            int si = startIndex.get(iri.getNamespace());
             os.writeInt(si);
-            String fragment = iri.getFragment();
-            if (fragment == null) {
+            com.google.common.base.Optional<String> remainder = iri.getRemainder();
+            if (!remainder.isPresent()) {
                 os.writeUTF("");
             }
             else {
-                os.writeUTF(fragment);
+                os.writeUTF(remainder.get());
             }
         }
     }
@@ -384,7 +386,7 @@ public class IRILookupTable {
         int index = getIndex(iri);
         if(index == -1) {
             writeIndex(NOT_INDEXED_MARKER, dataOutput);
-            String start = iri.getStart();
+            String start = iri.getNamespace();
             if(start == null) {
                 dataOutput.writeByte(0);
             }
@@ -392,13 +394,13 @@ public class IRILookupTable {
                 dataOutput.writeByte(1);
                 dataOutput.writeUTF(start);
             }
-            String fragment = iri.getFragment();
-            if(fragment == null) {
+            Optional<String> fragment = iri.getRemainder();
+            if(!fragment.isPresent()) {
                 dataOutput.writeByte(0);
             }
             else {
                 dataOutput.writeByte(1);
-                dataOutput.writeUTF(fragment);
+                dataOutput.writeUTF(fragment.get());
             }
         }
         else {

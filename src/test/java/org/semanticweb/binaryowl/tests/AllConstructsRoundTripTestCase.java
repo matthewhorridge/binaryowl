@@ -1,5 +1,6 @@
 package org.semanticweb.binaryowl.tests;
 
+import org.hamcrest.Matchers;
 import org.junit.Test;
 import org.semanticweb.binaryowl.owlapi.OWLOntologyWrapper;
 import org.semanticweb.owlapi.apibinding.OWLManager;
@@ -11,8 +12,10 @@ import org.semanticweb.owlapi.model.*;
 import java.io.*;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Set;
 
-import static junit.framework.Assert.assertEquals;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 
 /**
  * Author: Matthew Horridge<br>
@@ -38,10 +41,12 @@ public class AllConstructsRoundTripTestCase {
         ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
         serializer.read(inputStream, new BinaryOWLOntologyBuildingHandler(ontIn), manager.getOWLDataFactory());
 
-        assertEquals(ont, ontIn);
-        assertEquals(ont.getAnnotations(), ontIn.getAnnotations());
+        assertThat(ont, is(ontIn));
+        assertThat(ont.getAnnotations(), is(ontIn.getAnnotations()));
         for(AxiomType<?> type : AxiomType.AXIOM_TYPES) {
-            assertEquals(ont.getAxioms(type), ontIn.getAxioms(type));
+            Set<? extends OWLAxiom> ontAxioms = ont.getAxioms(type);
+            Set<? extends OWLAxiom> inAxioms = ontIn.getAxioms(type);
+            assertThat(ontAxioms, Matchers.<Set<? extends OWLAxiom>>is(inAxioms));
         }
     }
 }
