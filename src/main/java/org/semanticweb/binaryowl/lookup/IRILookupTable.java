@@ -40,6 +40,7 @@
 package org.semanticweb.binaryowl.lookup;
 
 import com.google.common.base.*;
+import com.google.common.base.Optional;
 import org.semanticweb.binaryowl.doc.OWLOntologyDocument;
 import org.semanticweb.owlapi.model.*;
 import uk.ac.manchester.cs.owl.owlapi.*;
@@ -393,13 +394,13 @@ public class IRILookupTable {
                 dataOutput.writeByte(1);
                 dataOutput.writeUTF(start);
             }
-            String fragment = iri.getFragment();
-            if(fragment == null) {
+            Optional<String> fragment = iri.getRemainder();
+            if(!fragment.isPresent()) {
                 dataOutput.writeByte(0);
             }
             else {
                 dataOutput.writeByte(1);
-                dataOutput.writeUTF(fragment);
+                dataOutput.writeUTF(fragment.get());
             }
         }
         else {
