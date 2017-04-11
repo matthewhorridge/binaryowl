@@ -31,17 +31,18 @@ public class Version1ChangeLogParseTestCase {
 
     private static final int EXPECTED_CHANGE_SETS_COUNT = 83;
 
+    private BinaryOWLOntologyChangeLog log;
+
     @Before
     public void setUp() throws Exception {
         changeDataURL = Version1ChangeLogParseTestCase.class.getResource("/change-data-v1.binary");
         df = OWLManager.getOWLDataFactory();
+        log = new BinaryOWLOntologyChangeLog();
     }
 
     @Test
     public void shouldParseVersion1ChangeLog() throws Exception {
-        try {
-            final BufferedInputStream inputStream = new BufferedInputStream(changeDataURL.openStream());
-            final BinaryOWLOntologyChangeLog log = new BinaryOWLOntologyChangeLog();
+        try (BufferedInputStream inputStream = new BufferedInputStream(changeDataURL.openStream())) {
             log.readChanges(inputStream, df,
                             (list, skipSetting, filePosition) -> counter += list.getChangeRecords().size());
             inputStream.close();
@@ -53,20 +54,46 @@ public class Version1ChangeLogParseTestCase {
     }
 
     @Test
-    public void shouldParseVersion1ChangeLogWithSkipSetting() throws Exception {
-        try {
-            final BufferedInputStream inputStream = new BufferedInputStream(changeDataURL.openStream());
-            final BinaryOWLOntologyChangeLog log = new BinaryOWLOntologyChangeLog();
+    public void shouldParseVersion1ChangeLogWithSkipDataSetting() throws Exception {
+        try (BufferedInputStream inputStream = new BufferedInputStream(changeDataURL.openStream())) {
             log.readChanges(inputStream, df,
                             (list, skipSetting, filePosition) -> counter ++,
                             SkipSetting.SKIP_DATA);
-            inputStream.close();
             assertThat(counter, is(EXPECTED_CHANGE_SETS_COUNT));
         } catch (Exception e) {
             fail("Parse failed with exception: " + e);
-            e.printStackTrace();
+            throw e;
         }
     }
 
+
+    @Test
+    public void shouldParseVersion1ChangeLogWithSkipMetaDataSetting() throws Exception {
+        try (BufferedInputStream inputStream = new BufferedInputStream(changeDataURL.openStream())) {
+            log.readChanges(inputStream, df,
+                            (list, skipSetting, filePosition) -> counter ++,
+                            SkipSetting.SKIP_METADATA);
+            assertThat(counter, is(EXPECTED_CHANGE_SETS_COUNT));
+        } catch (Exception e) {
+            fail("Parse failed with exception: " + e);
+            throw e;
+        }
+    }
+
+
+
+
+    @Test
+    public void shouldParseVersion1ChangeLogWithSkipDataAndMetaDataSetting() throws Exception {
+        try (BufferedInputStream inputStream = new BufferedInputStream(changeDataURL.openStream())) {
+            log.readChanges(inputStream, df,
+                            (list, skipSetting, filePosition) -> counter ++,
+                            SkipSetting.SKIP_METADATA_AND_DATA);
+            assertThat(counter, is(EXPECTED_CHANGE_SETS_COUNT));
+        } catch (Exception e) {
+            fail("Parse failed with exception: " + e);
+            throw e;
+        }
+    }
 
 }
