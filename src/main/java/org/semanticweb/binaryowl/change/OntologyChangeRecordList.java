@@ -78,6 +78,8 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
 
     public static final int CHUNK_TYPE_MARKER = ChunkUtil.toInt("ochr");
 
+    private static final int CHUNK_TYPE_AND_LENGTH_SIZE = 8;
+
     private long timestamp;
     
     private BinaryOWLMetadata metadata;
@@ -244,6 +246,7 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
     }
 
     private void read(BinaryOWLInputStream inputStream, SkipSetting skipSetting) throws IOException, BinaryOWLParseException {
+        long startPos = inputStream.getBytesRead();
         // Size
         int chunkSize = inputStream.readInt();
         // Marker
@@ -276,8 +279,9 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
         else {
             metadata = new BinaryOWLMetadata(inputStream);
         }
+        long curPos = inputStream.getBytesRead();
         if(skipSetting.isSkipData()) {
-            int bytesToSkip = chunkSize - 4 - metadataSize;
+            int bytesToSkip = chunkSize - (int)(curPos - startPos) + CHUNK_TYPE_AND_LENGTH_SIZE;
             inputStream.skipBytes(bytesToSkip);
             changeRecords = ImmutableList.of();
         }
@@ -285,6 +289,7 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
             changeRecords = readRecords(inputStream);
         }
 
+        long nextPos = inputStream.getBytesRead();
         if(versionNumber == VERSION_2) {
             inputStream.popLookupTable();
         }

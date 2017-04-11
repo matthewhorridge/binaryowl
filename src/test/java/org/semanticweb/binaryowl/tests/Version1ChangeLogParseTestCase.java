@@ -2,16 +2,12 @@ package org.semanticweb.binaryowl.tests;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.semanticweb.binaryowl.BinaryOWLChangeLogHandler;
 import org.semanticweb.binaryowl.BinaryOWLOntologyChangeLog;
-import org.semanticweb.binaryowl.change.OntologyChangeRecordList;
 import org.semanticweb.binaryowl.chunk.SkipSetting;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 
 import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
 import static org.hamcrest.Matchers.is;
@@ -33,6 +29,8 @@ public class Version1ChangeLogParseTestCase {
 
     private static final int EXPECTED_CHANGE_COUNT = 323;
 
+    private static final int EXPECTED_CHANGE_SETS_COUNT = 83;
+
     @Before
     public void setUp() throws Exception {
         changeDataURL = Version1ChangeLogParseTestCase.class.getResource("/change-data-v1.binary");
@@ -42,21 +40,33 @@ public class Version1ChangeLogParseTestCase {
     @Test
     public void shouldParseVersion1ChangeLog() throws Exception {
         try {
-            final BinaryOWLOntologyChangeLog outLog = new BinaryOWLOntologyChangeLog();
             final BufferedInputStream inputStream = new BufferedInputStream(changeDataURL.openStream());
             final BinaryOWLOntologyChangeLog log = new BinaryOWLOntologyChangeLog();
-            log.readChanges(inputStream, df, new BinaryOWLChangeLogHandler() {
-                @Override
-                public void handleChangesRead(OntologyChangeRecordList list, SkipSetting skipSetting, long filePosition) {
-                    counter += list.getChangeRecords().size();
-                }
-            });
+            log.readChanges(inputStream, df,
+                            (list, skipSetting, filePosition) -> counter += list.getChangeRecords().size());
             inputStream.close();
             assertThat(counter, is(EXPECTED_CHANGE_COUNT));
         } catch (Exception e) {
             fail("Parse failed with exception: " + e);
             e.printStackTrace();
         }
-
     }
+
+    @Test
+    public void shouldParseVersion1ChangeLogWithSkipSetting() throws Exception {
+        try {
+            final BufferedInputStream inputStream = new BufferedInputStream(changeDataURL.openStream());
+            final BinaryOWLOntologyChangeLog log = new BinaryOWLOntologyChangeLog();
+            log.readChanges(inputStream, df,
+                            (list, skipSetting, filePosition) -> counter ++,
+                            SkipSetting.SKIP_DATA);
+            inputStream.close();
+            assertThat(counter, is(EXPECTED_CHANGE_SETS_COUNT));
+        } catch (Exception e) {
+            fail("Parse failed with exception: " + e);
+            e.printStackTrace();
+        }
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package org.semanticweb.binaryowl.stream;
 
+import com.google.common.io.CountingInputStream;
 import org.semanticweb.binaryowl.BinaryOWLParseException;
 import org.semanticweb.binaryowl.BinaryOWLVersion;
 import org.semanticweb.binaryowl.lookup.IRILookupTable;
@@ -36,6 +37,8 @@ public class BinaryOWLInputStream extends InputStream {
 
     private ArrayList<OWLAnonymousIndividual> anonIndividualList = new ArrayList<OWLAnonymousIndividual>();
 
+    private final CountingInputStream countingInputStream;
+
     public BinaryOWLInputStream(InputStream inputStream, OWLDataFactory dataFactory, BinaryOWLVersion version) {
         this(inputStream, createEmptyLookupTable(dataFactory), dataFactory, version);
     }
@@ -45,16 +48,16 @@ public class BinaryOWLInputStream extends InputStream {
     }
 
     public BinaryOWLInputStream(InputStream inputStream, LookupTable lookupTable, OWLDataFactory dataFactory, BinaryOWLVersion version) {
-        if(inputStream instanceof DataInputStream) {
-            this.dataInput = (DataInputStream) inputStream;
-        }
-        else {
-            this.dataInput = new DataInputStream(inputStream);
-        }
-        this.lookupTableStack = new ArrayDeque<LookupTable>();
+        countingInputStream = new CountingInputStream(inputStream);
+        this.dataInput = new DataInputStream(countingInputStream);
+        this.lookupTableStack = new ArrayDeque<>();
         this.lookupTableStack.push(lookupTable);
         this.dataFactory = dataFactory;
         this.version = version;
+    }
+
+    public long getBytesRead() {
+        return countingInputStream.getCount();
     }
 
     public void pushLookupTable(LookupTable lookupTable) {
