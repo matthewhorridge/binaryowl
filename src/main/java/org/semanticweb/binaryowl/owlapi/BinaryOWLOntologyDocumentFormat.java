@@ -77,6 +77,11 @@ public class BinaryOWLOntologyDocumentFormat extends OWLDocumentFormatImpl {
         return false;
     }
 
+    @Override
+    public boolean isTextual() {
+        return false;
+    }
+
     @Nonnull
     @Override
     public PrefixDocumentFormat asPrefixOWLOntologyFormat() {
