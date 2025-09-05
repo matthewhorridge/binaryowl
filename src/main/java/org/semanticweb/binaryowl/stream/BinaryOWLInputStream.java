@@ -6,7 +6,6 @@ import org.semanticweb.binaryowl.BinaryOWLVersion;
 import org.semanticweb.binaryowl.lookup.IRILookupTable;
 import org.semanticweb.binaryowl.owlobject.OWLObjectBinaryType;
 import org.semanticweb.binaryowl.lookup.LookupTable;
-import org.semanticweb.binaryowl.owlobject.serializer.OWLLiteralSerializer;
 import org.semanticweb.owlapi.model.*;
 
 import java.io.DataInputStream;
@@ -32,8 +31,6 @@ public class BinaryOWLInputStream extends InputStream {
     private OWLDataFactory dataFactory;
 
     private BinaryOWLVersion version;
-
-    public static final OWLLiteralSerializer LITERAL_SERIALIZER = new OWLLiteralSerializer();
 
     private ArrayList<OWLAnonymousIndividual> anonIndividualList = new ArrayList<OWLAnonymousIndividual>();
 
@@ -77,6 +74,10 @@ public class BinaryOWLInputStream extends InputStream {
 
     public BinaryOWLVersion getVersion() {
         return version;
+    }
+
+    public void setVersion(BinaryOWLVersion version) {
+        this.version = version;
     }
 
     public OWLDataFactory getDataFactory() {
@@ -147,21 +148,10 @@ public class BinaryOWLInputStream extends InputStream {
         return peekLookupTable().readDatatypeIRI(dataInput);
     }
 
-    public OWLLiteral readLiteral() throws IOException, BinaryOWLParseException {
-        if(version.getVersion() == 1) {
-            return LITERAL_SERIALIZER.readLiteral(this);
-        }
-        else {
-            // Just read as OWLObject
-            return readOWLObject();
-        }
-    }
-
     public IRILookupTable readIRILookupTable() throws IOException {
         return new IRILookupTable(dataInput);
     }
 
-    
     private Map<Integer, OWLAnonymousIndividual> map = new HashMap<Integer, OWLAnonymousIndividual>();
 
     public OWLAnonymousIndividual readAnonymousIndividual() throws IOException {
@@ -610,5 +600,9 @@ public class BinaryOWLInputStream extends InputStream {
     @Override
     public int read() throws IOException {
         return dataInput.read();
+    }
+
+    public int readVarInt() throws IOException {
+        return VarInt.readVarInt(dataInput);
     }
 }

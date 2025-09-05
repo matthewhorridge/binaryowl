@@ -42,6 +42,7 @@ package org.semanticweb.binaryowl.change;
 import com.google.common.collect.ImmutableList;
 import org.semanticweb.binaryowl.BinaryOWLMetadata;
 import org.semanticweb.binaryowl.BinaryOWLParseException;
+import org.semanticweb.binaryowl.BinaryOWLVersion;
 import org.semanticweb.binaryowl.chunk.ChunkUtil;
 import org.semanticweb.binaryowl.chunk.SkipSetting;
 import org.semanticweb.binaryowl.chunk.TimeStampedMetadataChunk;
@@ -75,6 +76,8 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
     private static final short VERSION_1 = 1;
 
     private static final short VERSION_2 = 2;
+
+    private static final short VERSION_3 = 3;
 
     public static final int CHUNK_TYPE_MARKER = ChunkUtil.toInt("ochr");
 
@@ -160,10 +163,10 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
 
         IRILookupTable iriLookupTable = new IRILookupTable(getChangeSignature());
         LookupTable lookupTable = new LookupTable(iriLookupTable);
-        BinaryOWLOutputStream bufOWLOutputStream = new BinaryOWLOutputStream(bufDataOutputStream, lookupTable);
+        BinaryOWLOutputStream bufOWLOutputStream = new BinaryOWLOutputStream(bufDataOutputStream, lookupTable, BinaryOWLVersion.getVersion(VERSION_3));
 
         // Record format version
-        bufDataOutputStream.writeShort(VERSION_2);
+        bufDataOutputStream.writeShort(VERSION_3);
 
         // LookupTable
         lookupTable.getIRILookupTable().write(bufDataOutputStream);
@@ -258,11 +261,13 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
         // Record format version
         short versionNumber = inputStream.readShort();
         // For the moment we can only handle version 1 stuff
-        if(versionNumber != VERSION_1 && versionNumber != VERSION_2) {
+        if(versionNumber != VERSION_1 && versionNumber != VERSION_2 && versionNumber != VERSION_3) {
             throw new BinaryOWLParseException("Invalid version specifier.  Found 0x" + Integer.toHexString(versionNumber) + " but expected 0x" + Integer.toHexString(VERSION_1) + " or 0x" + Integer.toHexString(VERSION_2));
         }
 
-        if(versionNumber == VERSION_2) {
+        inputStream.setVersion(BinaryOWLVersion.getVersion(versionNumber));
+
+        if(versionNumber >= VERSION_2) {
             IRILookupTable iriLookupTable = inputStream.readIRILookupTable();
             LookupTable lookupTable = new LookupTable(iriLookupTable);
             inputStream.pushLookupTable(lookupTable);

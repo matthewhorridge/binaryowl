@@ -3,10 +3,8 @@ package org.semanticweb.binaryowl.stream;
 import org.semanticweb.binaryowl.BinaryOWLVersion;
 import org.semanticweb.binaryowl.owlobject.OWLObjectBinaryType;
 import org.semanticweb.binaryowl.lookup.LookupTable;
-import org.semanticweb.binaryowl.owlobject.serializer.OWLLiteralSerializer;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
-import org.semanticweb.owlapi.model.OWLLiteral;
 import org.semanticweb.owlapi.model.OWLObject;
 
 import java.io.DataOutput;
@@ -25,13 +23,11 @@ import static org.semanticweb.binaryowl.stream.BinaryOWLStreamUtil.writeCollecti
  */
 public class BinaryOWLOutputStream extends OutputStream {
 
-    private DataOutput dataOutput;
+    private final DataOutput dataOutput;
     
-    private LookupTable lookupTable;
+    private final LookupTable lookupTable;
 
-    public static final OWLLiteralSerializer LITERAL_SERIALIZER = new OWLLiteralSerializer();
-
-    private BinaryOWLVersion version = BinaryOWLVersion.getVersion(1);
+    private final BinaryOWLVersion version;
 
     private final SetTransformer setTransformer;
 
@@ -47,16 +43,11 @@ public class BinaryOWLOutputStream extends OutputStream {
         this.setTransformer = new PassThroughSetTransformer();
     }
 
-    public BinaryOWLOutputStream(DataOutput dataOutput, LookupTable lookupTable) {
+    public BinaryOWLOutputStream(DataOutput dataOutput, LookupTable lookupTable, BinaryOWLVersion version) {
         this.dataOutput = dataOutput;
         this.lookupTable = lookupTable;
         this.setTransformer = new PassThroughSetTransformer();
-    }
-
-    public BinaryOWLOutputStream(DataOutput dataOutput, SetTransformer setTransformer) {
-        this.dataOutput = dataOutput;
-        this.setTransformer = setTransformer;
-        this.lookupTable = LookupTable.emptyLookupTable();
+        this.version = version;
     }
 
     public BinaryOWLVersion getVersion() {
@@ -84,15 +75,6 @@ public class BinaryOWLOutputStream extends OutputStream {
 
     public void writeIRI(IRI iri) throws IOException {
         lookupTable.writeIRI(iri, dataOutput);
-    }
-
-    public void writeLiteral(OWLLiteral literal) throws IOException {
-        if (version.getVersion() == 1) {
-            LITERAL_SERIALIZER.writeLiteral(this, literal);
-        }
-        else {
-            writeOWLObject(literal);
-        }
     }
 
     public void writeAnonymousIndividual(OWLAnonymousIndividual individual) throws IOException {
@@ -390,6 +372,9 @@ public class BinaryOWLOutputStream extends OutputStream {
         dataOutput.write(bytes);
     }
 
+    public void writeVarInt(int value) throws IOException {
+        VarInt.writeVarInt(dataOutput, value);
+    }
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

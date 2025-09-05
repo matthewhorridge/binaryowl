@@ -88,20 +88,15 @@ public class OWLLiteralSerializer extends OWLObjectSerializer<OWLLiteral> {
 
     private static final OWLLiteral BOOLEAN_FALSE = new OWLLiteralImplNoCompression("false", null, XSD_BOOLEAN_DATATYPE);
 
+
     @Override
     protected void writeObject(OWLLiteral object, BinaryOWLOutputStream outputStream) throws IOException {
-        outputStream.writeLiteral(object);
+        writeRawLiteral(outputStream, object);
     }
 
     @Override
     protected OWLLiteral readObject(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
-        return inputStream.readLiteral();
-    }
-
-    public OWLLiteral readLiteral(BinaryOWLInputStream is) throws IOException {
-
-            return readRawLiteral(is);
-
+        return readRawLiteral(inputStream);
     }
 
     private OWLLiteral readRawLiteral(BinaryOWLInputStream is) throws IOException {
@@ -146,13 +141,6 @@ public class OWLLiteralSerializer extends OWLObjectSerializer<OWLLiteral> {
 
     }
 
-
-    public void writeLiteral(BinaryOWLOutputStream outputStream, OWLLiteral literal) throws IOException {
-            writeRawLiteral(outputStream, literal);
-
-
-    }
-
     private void writeRawLiteral(BinaryOWLOutputStream outputStream, OWLLiteral literal) throws IOException {
         if(literal.getDatatype().equals(XSD_BOOLEAN_DATATYPE)) {
             outputStream.writeByte(XSD_BOOLEAN_MARKER);
@@ -185,9 +173,6 @@ public class OWLLiteralSerializer extends OWLObjectSerializer<OWLLiteral> {
             literalBytes = literal.getLiteral().getBytes(UTF_8);
         }
         writeBytes(literalBytes, outputStream);
-
-
-
     }
 
     private void writeString(String s, BinaryOWLOutputStream outputStream) throws IOException {
@@ -196,15 +181,35 @@ public class OWLLiteralSerializer extends OWLObjectSerializer<OWLLiteral> {
 
 
     private void writeBytes(byte[] bytes, BinaryOWLOutputStream os) throws IOException {
-        os.writeShort(bytes.length);
-        os.write(bytes);
+        if(os.getVersion().getVersion() <= 2) {
+            if(bytes.length >= Short.MAX_VALUE) {
+                throw new IOException("Cannot store byte array that is equal or longer to Short.MAX_VALUE");
+            }
+            os.writeShort(bytes.length);
+            os.write(bytes);
+        }
+        else {
+            // Version 3 onwards uses var int encoding of length
+            os.writeVarInt(bytes.length);
+            os.write(bytes);
+        }
+
     }
 
 
     private byte[] readBytes(BinaryOWLInputStream is) throws IOException {
-        int length = is.readShort();
-        byte[] bytes = new byte[length];
-        is.readFully(bytes);
-        return bytes;
+        if (is.getVersion().getVersion() <= 2) {
+            int length = is.readShort();
+            byte[] bytes = new byte[length];
+            is.readFully(bytes);
+            return bytes;
+        }
+        else {
+            // Version 3 onwards uses var int encoding of length
+            int length = is.readVarInt();
+            byte[] bytes = new byte[length];
+            is.readFully(bytes);
+            return bytes;
+        }
     }
 }

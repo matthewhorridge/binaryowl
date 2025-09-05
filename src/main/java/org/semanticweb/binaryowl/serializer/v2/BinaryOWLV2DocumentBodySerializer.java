@@ -1,10 +1,6 @@
-package org.semanticweb.binaryowl.serializer.v1;
+package org.semanticweb.binaryowl.serializer.v2;
 
-import org.semanticweb.binaryowl.BinaryOWLMetadata;
-import org.semanticweb.binaryowl.BinaryOWLOntologyDocumentAppendedChangeHandler;
-import org.semanticweb.binaryowl.BinaryOWLOntologyDocumentHandler;
-import org.semanticweb.binaryowl.BinaryOWLParseException;
-import org.semanticweb.binaryowl.BinaryOWLVersion;
+import org.semanticweb.binaryowl.*;
 import org.semanticweb.binaryowl.change.OntologyChangeDataList;
 import org.semanticweb.binaryowl.chunk.BinaryOWLMetadataChunk;
 import org.semanticweb.binaryowl.doc.OWLOntologyDocument;
@@ -16,13 +12,7 @@ import org.semanticweb.binaryowl.owlobject.serializer.BinaryOWLOntologyID;
 import org.semanticweb.binaryowl.serializer.BinaryOWLDocumentBodySerializer;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
-import org.semanticweb.owlapi.model.AxiomType;
-import org.semanticweb.owlapi.model.OWLAnnotation;
-import org.semanticweb.owlapi.model.OWLAxiom;
-import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.OWLImportsDeclaration;
-import org.semanticweb.owlapi.model.OWLOntologyID;
-import org.semanticweb.owlapi.model.UnloadableImportException;
+import org.semanticweb.owlapi.model.*;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -32,21 +22,12 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-/**
- * Author: Matthew Horridge<br>
- * Stanford University<br>
- * Bio-Medical Informatics Research Group<br>
- * Date: 23/07/2013
- * <p>
- *     A serializer for legacy v1 format
- * </p>
- */
-public class BinaryOWLV1DocumentBodySerializer implements BinaryOWLDocumentBodySerializer {
+public class BinaryOWLV2DocumentBodySerializer implements BinaryOWLDocumentBodySerializer {
 
     /**
-     * The version written by this serializer - always 1.
+     * The version written by this serializer - always 2.
      */
-    private static final BinaryOWLVersion VERSION = BinaryOWLVersion.getVersion(1);
+    private static final BinaryOWLVersion VERSION = BinaryOWLVersion.getVersion(2);
 
     public <E extends Throwable> void read(DataInputStream dis, BinaryOWLOntologyDocumentHandler<E> handler, OWLDataFactory df) throws IOException, BinaryOWLParseException, UnloadableImportException, E {
 
@@ -114,8 +95,6 @@ public class BinaryOWLV1DocumentBodySerializer implements BinaryOWLDocumentBodyS
             chunkFollowsMarker = (byte) inputStream.read();
         }
     }
-
-
 
 
     public void write(OWLOntologyDocument doc, DataOutputStream dos, BinaryOWLMetadata documentMetadata) throws IOException {

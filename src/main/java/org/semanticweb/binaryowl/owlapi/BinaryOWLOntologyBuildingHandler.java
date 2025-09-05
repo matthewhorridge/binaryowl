@@ -54,7 +54,13 @@ public class BinaryOWLOntologyBuildingHandler implements BinaryOWLOntologyDocume
         }
         for (OWLImportsDeclaration decl : importsDeclarations) {
             if (!loaderConfiguration.isIgnoredImport(decl.getIRI())) {
-                manager.makeLoadImportRequest(decl, loaderConfiguration);
+                try {
+                    manager.makeLoadImportRequest(decl, loaderConfiguration);
+                } catch (UnloadableImportException e) {
+                    if(loaderConfiguration.getMissingImportHandlingStrategy().equals(MissingImportHandlingStrategy.THROW_EXCEPTION)) {
+                        throw e;
+                    }
+                }
             }
         }
         for (OWLAnnotation annotation : annotations) {

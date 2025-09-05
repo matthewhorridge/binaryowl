@@ -56,7 +56,7 @@ public class BinaryOWLOntologyDocumentPreamble {
     
     public static final int MAGIC_NUMBER = ChunkUtil.toInt("BO2O");
 
-    public static final BinaryOWLVersion DEFAULT_VERSION = BinaryOWLVersion.getVersion(1);
+    public static final BinaryOWLVersion DEFAULT_VERSION = BinaryOWLVersion.getVersion(3);
 
     private BinaryOWLVersion fileFormatVersion;
     
