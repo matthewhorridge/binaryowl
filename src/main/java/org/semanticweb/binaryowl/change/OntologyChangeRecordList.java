@@ -42,6 +42,7 @@ package org.semanticweb.binaryowl.change;
 import com.google.common.collect.ImmutableList;
 import org.semanticweb.binaryowl.BinaryOWLMetadata;
 import org.semanticweb.binaryowl.BinaryOWLParseException;
+import org.semanticweb.binaryowl.BinaryOWLVersion;
 import org.semanticweb.binaryowl.chunk.ChunkUtil;
 import org.semanticweb.binaryowl.chunk.SkipSetting;
 import org.semanticweb.binaryowl.chunk.TimeStampedMetadataChunk;
@@ -160,7 +161,7 @@ public class OntologyChangeRecordList implements TimeStampedMetadataChunk {
 
         IRILookupTable iriLookupTable = new IRILookupTable(getChangeSignature());
         LookupTable lookupTable = new LookupTable(iriLookupTable);
-        BinaryOWLOutputStream bufOWLOutputStream = new BinaryOWLOutputStream(bufDataOutputStream, lookupTable);
+        BinaryOWLOutputStream bufOWLOutputStream = new BinaryOWLOutputStream(bufDataOutputStream, lookupTable, BinaryOWLVersion.getVersion(VERSION_2));
 
         // Record format version
         bufDataOutputStream.writeShort(VERSION_2);
