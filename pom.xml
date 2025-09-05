@@ -107,6 +107,10 @@
                     so we can check that this non-UTF-8 encoding can be used to pass the tests.
                     -->
                     <argLine>-Dfile.encoding=ISO-8859-1</argLine>
+                    <argLine>
+                        --add-opens=java.base/java.lang=ALL-UNNAMED
+                        --add-opens=java.base/java.lang.invoke=ALL-UNNAMED
+                    </argLine>
                 </configuration>
             </plugin>
 
