@@ -3,7 +3,6 @@ package org.semanticweb.binaryowl.stream;
 import org.semanticweb.binaryowl.BinaryOWLVersion;
 import org.semanticweb.binaryowl.owlobject.OWLObjectBinaryType;
 import org.semanticweb.binaryowl.lookup.LookupTable;
-import org.semanticweb.binaryowl.owlobject.serializer.OWLLiteralSerializer;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnonymousIndividual;
 import org.semanticweb.owlapi.model.OWLObject;
