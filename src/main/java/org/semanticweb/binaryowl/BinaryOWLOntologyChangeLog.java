@@ -43,7 +43,6 @@ import org.semanticweb.binaryowl.change.OntologyChangeRecordList;
 import org.semanticweb.binaryowl.chunk.SkipSetting;
 import org.semanticweb.binaryowl.stream.BinaryOWLInputStream;
 import org.semanticweb.binaryowl.stream.BinaryOWLOutputStream;
-import org.semanticweb.owlapi.change.OWLOntologyChangeRecord;
 import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLOntologyChange;
 
@@ -58,6 +57,10 @@ import java.util.List;
  */
 public class BinaryOWLOntologyChangeLog {
 
+
+    public static final int VERSION = 3;
+
+    public static final int VERSION_1 = 1;
 
     public void appendChanges(List<OWLOntologyChange> changeList, long timestamp, BinaryOWLMetadata changeListMetadata, File file) throws IOException {
         final BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(file, true));
@@ -78,7 +81,7 @@ public class BinaryOWLOntologyChangeLog {
     public void appendChanges(OntologyChangeRecordList changeList, OutputStream os) throws IOException {
         DataOutputStream dos = new DataOutputStream(os);
         dos.writeByte(BinaryOWLOntologyDocumentSerializer.CHUNK_FOLLOWS_MARKER);
-        BinaryOWLOutputStream outputStream = new BinaryOWLOutputStream(dos, BinaryOWLVersion.getVersion(1));
+        BinaryOWLOutputStream outputStream = new BinaryOWLOutputStream(dos, BinaryOWLVersion.getVersion(VERSION));
         changeList.write(outputStream);
     }
 
@@ -88,7 +91,7 @@ public class BinaryOWLOntologyChangeLog {
 
     public void readChanges(InputStream is, OWLDataFactory dataFactory, BinaryOWLChangeLogHandler handler, SkipSetting skipSetting) throws IOException, BinaryOWLParseException {
         CountingInputStream countingInputStream = new CountingInputStream(is);
-        BinaryOWLInputStream inputStream = new BinaryOWLInputStream(countingInputStream, dataFactory, BinaryOWLVersion.getVersion(1));
+        BinaryOWLInputStream inputStream = new BinaryOWLInputStream(countingInputStream, dataFactory, BinaryOWLVersion.getVersion(VERSION_1));
         int marker = countingInputStream.read();
         while(marker == BinaryOWLOntologyDocumentSerializer.CHUNK_FOLLOWS_MARKER) {
             long filePosition = countingInputStream.getPosition();
@@ -118,7 +121,7 @@ public class BinaryOWLOntologyChangeLog {
         @Override
         public int read() throws IOException {
             int read = delegate.read();
-            if(read != -1) {
+            if(read != -VERSION_1) {
                 position++;
             }
             return read;
@@ -127,7 +130,7 @@ public class BinaryOWLOntologyChangeLog {
         @Override
         public int read(byte[] b) throws IOException {
             int read = super.read(b);
-            if(read != -1) {
+            if(read != -VERSION_1) {
                 position += read;
             }
             return read;
@@ -136,7 +139,7 @@ public class BinaryOWLOntologyChangeLog {
         @Override
         public int read(byte[] b, int off, int len) throws IOException {
             int read = super.read(b, off, len);
-            if(read != -1) {
+            if(read != -VERSION_1) {
                 position += read;
             }
             return read;

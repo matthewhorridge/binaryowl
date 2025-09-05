@@ -372,6 +372,9 @@ public class BinaryOWLOutputStream extends OutputStream {
         dataOutput.write(bytes);
     }
 
+    public void writeVarInt(int value) throws IOException {
+        VarInt.writeVarInt(dataOutput, value);
+    }
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

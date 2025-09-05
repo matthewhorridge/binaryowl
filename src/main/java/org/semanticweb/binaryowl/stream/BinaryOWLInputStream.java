@@ -76,6 +76,10 @@ public class BinaryOWLInputStream extends InputStream {
         return version;
     }
 
+    public void setVersion(BinaryOWLVersion version) {
+        this.version = version;
+    }
+
     public OWLDataFactory getDataFactory() {
         return dataFactory;
     }
@@ -596,5 +600,9 @@ public class BinaryOWLInputStream extends InputStream {
     @Override
     public int read() throws IOException {
         return dataInput.read();
+    }
+
+    public int readVarInt() throws IOException {
+        return VarInt.readVarInt(dataInput);
     }
 }

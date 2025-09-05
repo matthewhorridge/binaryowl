@@ -181,15 +181,35 @@ public class OWLLiteralSerializer extends OWLObjectSerializer<OWLLiteral> {
 
 
     private void writeBytes(byte[] bytes, BinaryOWLOutputStream os) throws IOException {
-        os.writeShort(bytes.length);
-        os.write(bytes);
+        if(os.getVersion().getVersion() <= 2) {
+            if(bytes.length >= Short.MAX_VALUE) {
+                throw new IOException("Cannot store byte array that is equal or longer to Short.MAX_VALUE");
+            }
+            os.writeShort(bytes.length);
+            os.write(bytes);
+        }
+        else {
+            // Version 3 onwards uses var int encoding of length
+            os.writeVarInt(bytes.length);
+            os.write(bytes);
+        }
+
     }
 
 
     private byte[] readBytes(BinaryOWLInputStream is) throws IOException {
-        int length = is.readShort();
-        byte[] bytes = new byte[length];
-        is.readFully(bytes);
-        return bytes;
+        if (is.getVersion().getVersion() <= 2) {
+            int length = is.readShort();
+            byte[] bytes = new byte[length];
+            is.readFully(bytes);
+            return bytes;
+        }
+        else {
+            // Version 3 onwards uses var int encoding of length
+            int length = is.readVarInt();
+            byte[] bytes = new byte[length];
+            is.readFully(bytes);
+            return bytes;
+        }
     }
 }
