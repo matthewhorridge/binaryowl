@@ -392,7 +392,7 @@ public class OWLObjectBinaryType<C extends OWLObject> {
      */
     public static <C extends OWLObject> C read(BinaryOWLInputStream inputStream) throws IOException, BinaryOWLParseException {
         byte typeMarker = inputStream.readByte();
-        checkPositionIndex(0, 84, "Invalid type marker");
+        checkPositionIndex(typeMarker, 84, "Invalid type marker: " + typeMarker);
         OWLObjectBinaryType<C> type = getType(typeMarker);
         return type.getSerializer().read(inputStream);
     }
